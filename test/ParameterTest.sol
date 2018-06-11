@@ -8,36 +8,33 @@ import "../contracts/ZeroExSubContract.sol";
 
 contract ParameterTest {
 
-    address[] addressParams;
-    uint[] numberParams;
+    bytes32[] data;
 
     function testParametersAccepted() {
         OrderGateway gateway = new OrderGateway();
         ZeroExSubContract zesc = new ZeroExSubContract();
 
-        addressParams.length = 0;
-        addressParams.push(address(gateway));
-        addressParams.push(address(gateway));
-        addressParams.push(address(gateway));
-        addressParams.push(address(gateway));
-        addressParams.push(address(gateway));
-        addressParams.push(address(gateway));
-        addressParams.push(address(gateway));
-        addressParams.push(address(gateway));
+        data.length = 0;
+        data.push(bytes32(address(0x0)));
+        data.push(bytes32(address(0x0)));
+        data.push(bytes32(address(0x0)));
+        data.push(bytes32(address(0x0)));
+        data.push(bytes32(address(0x0)));
+        data.push(bytes32(address(0x0)));
+        data.push(bytes32(address(0x0)));
+        data.push(bytes32(address(0x0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
+        data.push(bytes32(uint(0)));
 
-        numberParams.length = 0;
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-        numberParams.push(uint(0));
-
-        Assert.equal(gateway.participate(zesc, addressParams, numberParams), true, "Should Return");
+        Assert.equal(gateway.participate(zesc, data), true, "Should Return");
     }
 }
