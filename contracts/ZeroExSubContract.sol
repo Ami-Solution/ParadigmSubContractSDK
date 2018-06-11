@@ -6,23 +6,12 @@ import "./SubContract.sol";
 
 contract ZeroExSubContract is SubContract {
 
-  function participate(address[] addresses, uint[] values) returns (bool) {
+  function participate(bytes32[] data) public returns (bool) {
+//    uint value = exchange.fillOrder(
+//      [address(data[0]), address(data[1]), address(data[2]), address(data[3]), address(data[4])],
+//      [uint(data[5]), uint(data[6]), uint(data[7]), uint(data[8]), uint(data[9]), uint(data[10])],
+//      uint(data[11]), uint(data[12]) != 0, uint8(data[13]), data[14], data[15]);
 
-    return fillOrder(
-      [addresses[0], addresses[1], addresses[2], addresses[3], addresses[4]],
-      [values[0], values[1], values[2], values[3], values[4], values[5]],
-      values[6], values[7] == 1, uint8(values[8]), bytes32(values[9]), bytes32(values[10]));
-  }
-
-  function fillOrder(
-    address[5] orderAddresses,
-    uint[6] orderValues,
-    uint fillTakerTokenAmount,
-    bool shouldThrowOnInsufficientBalanceOrAllowance,
-    uint8 v,
-    bytes32 r,
-    bytes32 s) returns (bool) {
-//    Dummy test fill order.
     return true;
   }
 
