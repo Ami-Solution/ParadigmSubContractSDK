@@ -1,10 +1,16 @@
 pragma solidity ^0.4.24;
 
-//import { ZeroExExchangeInterface as Exchange } from "./ZeroExExchangeInterface.sol";
+import { ZeroExExchangeInterface as Exchange } from "./ZeroExExchangeInterface.sol";
 import "./SubContract.sol";
 //import "./Token.sol";
 
 contract ZeroExSubContract is SubContract {
+
+  Exchange public exchange;
+
+  function ZeroExSubContract(address _exchange) {
+    exchange = Exchange(_exchange);
+  }
 
   function participate(bytes32[] data) public returns (bool) {
 //    uint value = exchange.fillOrder(
