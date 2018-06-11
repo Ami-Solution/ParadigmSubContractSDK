@@ -31,7 +31,7 @@ contract ZeroExExchangeInterface {
     bytes32 r,
     bytes32 s)
   public
-  returns (uint filledTakerTokenAmount) {}
+  returns (uint filledTakerTokenAmount);
 
   /// @dev Cancels the input order.
   /// @param orderAddresses Array of order's maker, taker, makerToken, takerToken, and feeRecipient.
@@ -43,7 +43,7 @@ contract ZeroExExchangeInterface {
     uint[6] orderValues,
     uint cancelTakerTokenAmount)
   public
-  returns (uint) {}
+  returns (uint);
 
   /*
   * Wrapper functions
@@ -63,8 +63,7 @@ contract ZeroExExchangeInterface {
     uint8 v,
     bytes32 r,
     bytes32 s)
-  public
-  {}
+  public;
 
   /// @dev Synchronously executes multiple fill orders in a single transaction.
   /// @param orderAddresses Array of address arrays containing individual order addresses.
@@ -82,8 +81,7 @@ contract ZeroExExchangeInterface {
     uint8[] v,
     bytes32[] r,
     bytes32[] s)
-  public
-  {}
+  public;
 
   /// @dev Synchronously executes multiple fillOrKill orders in a single transaction.
   /// @param orderAddresses Array of address arrays containing individual order addresses.
@@ -99,8 +97,7 @@ contract ZeroExExchangeInterface {
     uint8[] v,
     bytes32[] r,
     bytes32[] s)
-  public
-  {}
+  public;
 
   /// @dev Synchronously executes multiple fill orders in a single transaction until total fillTakerTokenAmount filled.
   /// @param orderAddresses Array of address arrays containing individual order addresses.
@@ -120,9 +117,7 @@ contract ZeroExExchangeInterface {
     bytes32[] r,
     bytes32[] s)
   public
-  returns (uint)
-  {
-  }
+  returns (uint);
 
   /// @dev Synchronously cancels multiple orders in a single transaction.
   /// @param orderAddresses Array of address arrays containing individual order addresses.
@@ -132,9 +127,7 @@ contract ZeroExExchangeInterface {
     address[5][] orderAddresses,
     uint[6][] orderValues,
     uint[] cancelTakerTokenAmounts)
-  public
-  {
-  }
+  public;
 
   /*
   * Constant public functions
@@ -147,9 +140,7 @@ contract ZeroExExchangeInterface {
   function getOrderHash(address[5] orderAddresses, uint[6] orderValues)
   public
   constant
-  returns (bytes32)
-  {
-  }
+  returns (bytes32);
 
   /// @dev Verifies that an order signature is valid.
   /// @param signer address of signer.
@@ -166,9 +157,7 @@ contract ZeroExExchangeInterface {
     bytes32 s)
   public
   constant
-  returns (bool)
-  {
-  }
+  returns (bool);
 
   /// @dev Checks if rounding error > 0.1%.
   /// @param numerator Numerator.
@@ -178,9 +167,7 @@ contract ZeroExExchangeInterface {
   function isRoundingError(uint numerator, uint denominator, uint target)
   public
   constant
-  returns (bool)
-  {
-  }
+  returns (bool);
 
   /// @dev Calculates partial value given a numerator and denominator.
   /// @param numerator Numerator.
@@ -190,9 +177,7 @@ contract ZeroExExchangeInterface {
   function getPartialAmount(uint numerator, uint denominator, uint target)
   public
   constant
-  returns (uint)
-  {
-  }
+  returns (uint);
 
   /// @dev Calculates the sum of values already filled and cancelled for a given order.
   /// @param orderHash The Keccak-256 hash of the given order.
@@ -200,8 +185,6 @@ contract ZeroExExchangeInterface {
   function getUnavailableTakerTokenAmount(bytes32 orderHash)
   public
   constant
-  returns (uint)
-  {
-  }
+  returns (uint);
 
 }
