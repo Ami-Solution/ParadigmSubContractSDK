@@ -13,12 +13,12 @@ contract ZeroExSubContract is SubContract {
   }
 
   function participate(bytes32[] data) public returns (bool) {
-//    uint value = exchange.fillOrder(
-//      [address(data[0]), address(data[1]), address(data[2]), address(data[3]), address(data[4])],
-//      [uint(data[5]), uint(data[6]), uint(data[7]), uint(data[8]), uint(data[9]), uint(data[10])],
-//      uint(data[11]), uint(data[12]) != 0, uint8(data[13]), data[14], data[15]);
+    uint value = exchange.fillOrder(
+      [address(data[0]), address(data[1]), address(data[2]), address(data[3]), address(data[4])],
+      [uint(data[5]), uint(data[6]), uint(data[7]), uint(data[8]), uint(data[9]), uint(data[10])],
+      uint(data[11]), uint(data[12]) != 0, uint8(data[13]), data[14], data[15]);
 
-    return true;
+    return value > 0;
   }
 
 //  using SafeMath for uint256;
