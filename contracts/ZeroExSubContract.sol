@@ -15,6 +15,9 @@ contract ZeroExSubContract is SubContract {
   }
 
   function participate(bytes32[] data) public returns (bool) {
+
+    Token(address(data[3])).approve(proxy, uint(data[11]));
+
     uint value = exchange.fillOrder(
       [address(data[0]), address(data[1]), address(data[2]), address(data[3]), address(data[4])],
       [uint(data[5]), uint(data[6]), uint(data[7]), uint(data[8]), uint(data[9]), uint(data[10])],
