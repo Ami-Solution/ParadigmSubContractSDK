@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import { ZeroExExchangeInterface as Exchange } from "./ZeroExExchangeInterface.sol";
 import "./SubContract.sol";
-//import "./Token.sol";
+import "./Token.sol";
 
 contract ZeroExSubContract is SubContract {
 
