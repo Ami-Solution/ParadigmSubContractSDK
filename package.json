@@ -4,5 +4,11 @@
   "description": "",
   "scripts": {
     "testrpc": "ganache-cli --networkId 50 --db ./0x_testrpc_snapshot -m \"concert load couple harbor equip island argue ramp clarify fence smart topic\""
+  },
+  "dependencies": {
+    "0x.js": "^0.38.3",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "web3": "^1.0.0-beta.34"
   }
 }
