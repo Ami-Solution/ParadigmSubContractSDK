@@ -14,7 +14,7 @@ contract ParameterTest {
         OrderGateway gateway = new OrderGateway();
         ZeroExSubContract zesc = new ZeroExSubContract(0x48BaCB9266a570d521063EF5dD96e61686DbE788, 0x0000000000000000000000000000000000000000);
 
-        data.length = 0;
+        data.length = 0;//Clears data to zero length array
         data.push(bytes32(address(0x7ed8e5d7884ff0be732479a475acb82f229c9e35)));//0 -- maker
         data.push(bytes32(address(0x0000000000000000000000000000000000000000)));//1 -- taker
         data.push(bytes32(address(0x1d7022f5b17d2f8b695918fb48fa1089c9f85401)));//2 -- makerTokenAddress
