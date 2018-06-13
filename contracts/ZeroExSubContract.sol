@@ -7,9 +7,11 @@ import "./Token.sol";
 contract ZeroExSubContract is SubContract {
 
   Exchange public exchange;
+  address public proxy;
 
-  function ZeroExSubContract(address _exchange) {
+  function ZeroExSubContract(address _exchange, address _proxy) {
     exchange = Exchange(_exchange);
+    proxy = _proxy;
   }
 
   function participate(bytes32[] data) public returns (bool) {
