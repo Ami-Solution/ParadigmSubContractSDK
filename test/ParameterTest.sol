@@ -15,10 +15,10 @@ contract ParameterTest {
         ZeroExSubContract zesc = new ZeroExSubContract(0x48BaCB9266a570d521063EF5dD96e61686DbE788, 0x0000000000000000000000000000000000000000);
 
         data.length = 0;//Clears data to zero length array
-        data.push(bytes32(address(0x7ed8e5d7884ff0be732479a475acb82f229c9e35)));//0 -- maker
+        data.push(bytes32(address(0x7ed8E5d7884FF0Be732479a475ACB82f229C9e35)));//0 -- maker
         data.push(bytes32(address(0x0000000000000000000000000000000000000000)));//1 -- taker
-        data.push(bytes32(address(0x1d7022f5b17d2f8b695918fb48fa1089c9f85401)));//2 -- makerTokenAddress
-        data.push(bytes32(address(0x871dd7c2b4b25e1aa18728e9d5f2af4c4e431f5c)));//3 -- takerTokenAddress
+        data.push(bytes32(address(0x1D7022f5B17d2F8B695918FB48fa1089C9f85401)));//2 -- makerTokenAddress
+        data.push(bytes32(address(0x871DD7C2B4b25E1Aa18728e9D5f2Af4C4e431f5c)));//3 -- takerTokenAddress
         data.push(bytes32(address(0x0000000000000000000000000000000000000000)));//4 -- feeRecipient
         data.push(bytes32(uint(2)));//5 -- 0 -- makerTokenAmount
         data.push(bytes32(uint(2)));//6 -- 1 -- takerTokenAmount
