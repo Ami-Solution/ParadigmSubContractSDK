@@ -3,6 +3,7 @@ const OrderGateway = artifacts.require("./OrderGateway.sol");
 const Token = artifacts.require("./Token.sol");
 const ZeroEx = require('0x.js').ZeroEx;
 const BigNumber = require('@0xproject/utils').BigNumber;
+const ZeroExSubContractConfig = require('../configuration/ZeroExSubContract');
 
 contract('ZeroExSubContract', async function(accounts) {
   let tokenA, tokenB, orderGateway, zeroExSubContract, zeroEx, WETH_ADDRESS, ZRX_ADDRESS, EXCHANGE_ADDRESS, PROXY;
@@ -80,5 +81,9 @@ contract('ZeroExSubContract', async function(accounts) {
 
     (await tokenA.balanceOf.call(zeroExSubContract.address)).toString().should.eq(order.makerTokenAmount.toString()); //TODO: Contract needs to forward the funds.
     (await tokenB.balanceOf.call(accounts[1])).toString().should.eq(order.takerTokenAmount.toString());
+  });
+
+  it('should provide the input datatypes', async () => {
+    JSON.parse(await zeroExSubContract.dataTypes.call()).should.deep.equal(ZeroExSubContractConfig.dataTypes)
   });
 });
