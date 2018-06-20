@@ -9,9 +9,10 @@ contract ZeroExSubContract is SubContract {
   Exchange public exchange;
   address public proxy;
 
-  function ZeroExSubContract(address _exchange, address _proxy) {
+  function ZeroExSubContract(address _exchange, address _proxy, string _dataTypes) {
     exchange = Exchange(_exchange);
     proxy = _proxy;
+    dataTypes = _dataTypes;
   }
 
   function participate(bytes32[] data) public returns (bool) {

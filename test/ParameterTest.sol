@@ -12,7 +12,7 @@ contract ParameterTest {
 
     function testParametersAccepted() {
         OrderGateway gateway = new OrderGateway();
-        ZeroExSubContract zesc = new ZeroExSubContract(0x48BaCB9266a570d521063EF5dD96e61686DbE788, 0x0000000000000000000000000000000000000000);
+        ZeroExSubContract zesc = new ZeroExSubContract(0x48BaCB9266a570d521063EF5dD96e61686DbE788, 0x0000000000000000000000000000000000000000, "");
 
         data.length = 0;//Clears data to zero length array
         data.push(bytes32(address(0x7ed8E5d7884FF0Be732479a475ACB82f229C9e35)));//0 -- maker
