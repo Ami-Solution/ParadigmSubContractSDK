@@ -84,6 +84,6 @@ contract('ZeroExSubContract', async function(accounts) {
   });
 
   it('should provide the input datatypes', async () => {
-    JSON.parse(await zeroExSubContract.dataTypes.call()).should.deep.equal(ZeroExSubContractConfig.dataTypes)
+    JSON.parse(await orderGateway.dataTypes.call(zeroExSubContract.address)).should.deep.equal(ZeroExSubContractConfig.dataTypes)
   });
 });

@@ -10,4 +10,8 @@ contract OrderGateway {
     function participate(address subContract, bytes32[] data) returns (bool) {
         return SubContract(subContract).participate(data);
     }
+
+    function dataTypes(address subContract) returns (string) {
+        return SubContract(subContract).dataTypes();
+    }
 }
