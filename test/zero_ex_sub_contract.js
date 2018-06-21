@@ -4,6 +4,7 @@ const Token = artifacts.require("./Token.sol");
 const ZeroEx = require('0x.js').ZeroEx;
 const BigNumber = require('@0xproject/utils').BigNumber;
 const ZeroExSubContractConfig = require('../configuration/ZeroExSubContract');
+const ParadigmJS = require('paradigm.js');
 
 contract('ZeroExSubContract', async function(accounts) {
   let tokenA, tokenB, orderGateway, zeroExSubContract, zeroEx, WETH_ADDRESS, ZRX_ADDRESS, EXCHANGE_ADDRESS, PROXY;
@@ -58,22 +59,22 @@ contract('ZeroExSubContract', async function(accounts) {
     await orderGateway.participate(
       zeroExSubContract.address,
       [
-        utils.toBytes32(order.maker),
-        utils.toBytes32(order.taker),
-        utils.toBytes32(order.makerTokenAddress),
-        utils.toBytes32(order.takerTokenAddress),
-        utils.toBytes32(order.feeRecipient),
-        utils.toBytes32(order.makerTokenAmount),
-        utils.toBytes32(order.takerTokenAmount),
-        utils.toBytes32(order.makerFee),
-        utils.toBytes32(order.takerFee),
-        utils.toBytes32(order.expirationUnixTimestampSec),
-        utils.toBytes32(order.salt),
-        utils.toBytes32(order.takerTokenAmount),
-        utils.toBytes32(false),
-        utils.toBytes32(ecSignature.v),
-        utils.toBytes32(ecSignature.r),
-        utils.toBytes32(ecSignature.s)
+        ParadigmJS.utils.toBytes32(order.maker),
+        ParadigmJS.utils.toBytes32(order.taker),
+        ParadigmJS.utils.toBytes32(order.makerTokenAddress),
+        ParadigmJS.utils.toBytes32(order.takerTokenAddress),
+        ParadigmJS.utils.toBytes32(order.feeRecipient),
+        ParadigmJS.utils.toBytes32(order.makerTokenAmount),
+        ParadigmJS.utils.toBytes32(order.takerTokenAmount),
+        ParadigmJS.utils.toBytes32(order.makerFee),
+        ParadigmJS.utils.toBytes32(order.takerFee),
+        ParadigmJS.utils.toBytes32(order.expirationUnixTimestampSec),
+        ParadigmJS.utils.toBytes32(order.salt),
+        ParadigmJS.utils.toBytes32(order.takerTokenAmount),
+        ParadigmJS.utils.toBytes32(false),
+        ParadigmJS.utils.toBytes32(ecSignature.v),
+        ParadigmJS.utils.toBytes32(ecSignature.r),
+        ParadigmJS.utils.toBytes32(ecSignature.s)
       ]
     );
 
