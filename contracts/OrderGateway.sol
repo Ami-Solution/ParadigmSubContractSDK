@@ -7,7 +7,7 @@ contract OrderGateway {
 
     event DealAdded(address dealOwner, uint timestamp, address modelAddress, address desiredToken, address paymentToken);
 
-    function participate(address dealModel, bytes32[] data) returns (bool) {
-        return SubContract(dealModel).participate(data);
+    function participate(address subContract, bytes32[] data) returns (bool) {
+        return SubContract(subContract).participate(data);
     }
 }
