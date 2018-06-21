@@ -31,6 +31,7 @@ contract ParameterTest {
         data.push(bytes32(uint(27)));//13 -- v
         data.push(0x447f1c961d25c90bf43a9fc53b5e88fedc899adfc8fe944faae82e11543481c3);//14 -- r
         data.push(0x07c044c0ca05c2760cc163aecdb0699d1c8e830009415a40c2b2ef82085e8e8c);//15 -- s
+        data.push(bytes32(tx.origin));
 
 
         Assert.equal(gateway.participate(zesc, data), false, "Should Return");

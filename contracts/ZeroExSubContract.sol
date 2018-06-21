@@ -16,8 +16,9 @@ contract ZeroExSubContract is SubContract {
   }
 
   function participate(bytes32[] data) public returns (bool) {
-
-    Token(address(data[3])).approve(proxy, uint(data[11]));
+    address taker = address(data[16]);
+//    require(tx.origin == taker); //TODO: do we care?
+    Token(address(data[3])).approve(proxy, uint(data[11])); //TODO perhaps do a transfer from using tx.origin?
 
     uint value = exchange.fillOrder(
       [address(data[0]), address(data[1]), address(data[2]), address(data[3]), address(data[4])],
@@ -25,7 +26,7 @@ contract ZeroExSubContract is SubContract {
       uint(data[11]), uint(data[12]) != 0, uint8(data[13]), data[14], data[15]);
 
     if(value > 0) {
-      return Token(address(data[2])).transfer(address(data[16]), exchange.getPartialAmount(uint(data[5]), uint(data[6]), value));
+      return Token(address(data[2])).transfer(taker, exchange.getPartialAmount(uint(data[5]), uint(data[6]), value));
     } else {
       return false;
     }

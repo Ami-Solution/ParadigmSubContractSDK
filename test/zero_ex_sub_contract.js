@@ -77,7 +77,8 @@ contract('ZeroExSubContract', async function(accounts) {
           ecSignature.r,
           ecSignature.s,
           accounts[2]
-        ]
+        ],
+      { from: accounts[2] }
       );
 
     await orderGateway.participate(
