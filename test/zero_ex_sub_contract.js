@@ -58,26 +58,30 @@ contract('ZeroExSubContract', async function(accounts) {
 
     const ecSignature = await zeroEx.signOrderHashAsync(ZeroEx.getOrderHashHex(order), accounts[1], false);
 
+    const input = ParadigmJS.utils.toContractInput(zeroExSubContractDataTypes,
+        [
+          order.maker,
+          order.taker,
+          order.makerTokenAddress,
+          order.takerTokenAddress,
+          order.feeRecipient,
+          order.makerTokenAmount,
+          order.takerTokenAmount,
+          order.makerFee,
+          order.takerFee,
+          order.expirationUnixTimestampSec,
+          order.salt,
+          order.takerTokenAmount,
+          false,
+          ecSignature.v,
+          ecSignature.r,
+          ecSignature.s
+        ]
+      );
+
     await orderGateway.participate(
       zeroExSubContract.address,
-      [
-        ParadigmJS.utils.toBytes32(order.maker),
-        ParadigmJS.utils.toBytes32(order.taker),
-        ParadigmJS.utils.toBytes32(order.makerTokenAddress),
-        ParadigmJS.utils.toBytes32(order.takerTokenAddress),
-        ParadigmJS.utils.toBytes32(order.feeRecipient),
-        ParadigmJS.utils.toBytes32(order.makerTokenAmount),
-        ParadigmJS.utils.toBytes32(order.takerTokenAmount),
-        ParadigmJS.utils.toBytes32(order.makerFee),
-        ParadigmJS.utils.toBytes32(order.takerFee),
-        ParadigmJS.utils.toBytes32(order.expirationUnixTimestampSec),
-        ParadigmJS.utils.toBytes32(order.salt),
-        ParadigmJS.utils.toBytes32(order.takerTokenAmount),
-        ParadigmJS.utils.toBytes32(false),
-        ParadigmJS.utils.toBytes32(ecSignature.v),
-        ParadigmJS.utils.toBytes32(ecSignature.r),
-        ParadigmJS.utils.toBytes32(ecSignature.s)
-      ]
+      input
     );
 
 
