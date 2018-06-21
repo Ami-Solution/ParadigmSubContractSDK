@@ -14,5 +14,6 @@ exports.dataTypes = [
   ["bool", "throwOnError"],
   ["uint8", "Signature v"],
   ["bytes32", "Signature r"],
-  ["bytes32", "Signature s"]
+  ["bytes32", "Signature s"],
+  ["address", "maker token receiver"]
 ];
