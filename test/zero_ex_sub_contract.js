@@ -7,13 +7,15 @@ const ZeroExSubContractConfig = require('../configuration/ZeroExSubContract');
 const ParadigmJS = require('paradigm.js');
 
 contract('ZeroExSubContract', async function(accounts) {
-  let tokenA, tokenB, orderGateway, zeroExSubContract, zeroEx, WETH_ADDRESS, ZRX_ADDRESS, EXCHANGE_ADDRESS, PROXY;
+  let tokenA, tokenB, orderGateway, zeroExSubContract, zeroExSubContractDataTypes, zeroEx,
+    WETH_ADDRESS, ZRX_ADDRESS, EXCHANGE_ADDRESS, PROXY;
 
   before(async () => {
     tokenA = await Token.new("TokenA", 'TKA', { from: accounts[1] });
     tokenB = await Token.new("TokenB", 'TKB', { from: accounts[2] });
     orderGateway = await OrderGateway.deployed();
     zeroExSubContract = await ZeroExSubContract.deployed();
+    zeroExSubContractDataTypes = JSON.parse(await orderGateway.dataTypes.call(zeroExSubContract.address));
     zeroEx = new ZeroEx(web3.currentProvider, { networkId: 50 });
 
     WETH_ADDRESS = zeroEx.etherToken.getContractAddressIfExists();
@@ -85,6 +87,6 @@ contract('ZeroExSubContract', async function(accounts) {
   });
 
   it('should provide the input datatypes', async () => {
-    JSON.parse(await orderGateway.dataTypes.call(zeroExSubContract.address)).should.deep.equal(ZeroExSubContractConfig.dataTypes)
+    zeroExSubContractDataTypes.should.deep.equal(ZeroExSubContractConfig.dataTypes)
   });
 });
