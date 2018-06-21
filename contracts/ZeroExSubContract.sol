@@ -24,7 +24,11 @@ contract ZeroExSubContract is SubContract {
       [uint(data[5]), uint(data[6]), uint(data[7]), uint(data[8]), uint(data[9]), uint(data[10])],
       uint(data[11]), uint(data[12]) != 0, uint8(data[13]), data[14], data[15]);
 
-    return value > 0;
+    if(value > 0) {
+      return Token(address(data[2])).transfer(address(data[16]), exchange.getPartialAmount(uint(data[5]), uint(data[6]), value));
+    } else {
+      return false;
+    }
   }
 
 //  using SafeMath for uint256;

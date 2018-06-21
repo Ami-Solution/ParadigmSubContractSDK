@@ -75,7 +75,8 @@ contract('ZeroExSubContract', async function(accounts) {
           false,
           ecSignature.v,
           ecSignature.r,
-          ecSignature.s
+          ecSignature.s,
+          accounts[2]
         ]
       );
 
@@ -86,7 +87,7 @@ contract('ZeroExSubContract', async function(accounts) {
 
 
 
-    (await tokenA.balanceOf.call(zeroExSubContract.address)).toString().should.eq(order.makerTokenAmount.toString()); //TODO: Contract needs to forward the funds.
+    (await tokenA.balanceOf.call(accounts[2])).toString().should.eq(order.makerTokenAmount.toString()); //TODO: Contract needs to forward the funds.
     (await tokenB.balanceOf.call(accounts[1])).toString().should.eq(order.takerTokenAmount.toString());
   });
 
