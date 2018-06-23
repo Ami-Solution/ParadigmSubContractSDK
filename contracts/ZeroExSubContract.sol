@@ -7,18 +7,18 @@ import "./Token.sol";
 contract ZeroExSubContract is SubContract {
 
   Exchange public exchange;
-  address public proxy;
+  address public zeroExProxy;
 
   function ZeroExSubContract(address _exchange, address _proxy, string _dataTypes) {
     exchange = Exchange(_exchange);
-    proxy = _proxy;
+    zeroExProxy = _proxy;
     dataTypes = _dataTypes;
   }
 
   function participate(bytes32[] data) public returns (bool) {
     address taker = address(data[16]);
 //    require(tx.origin == taker); //TODO: do we care?
-    Token(address(data[3])).approve(proxy, uint(data[11])); //TODO perhaps do a transfer from using tx.origin?
+    Token(address(data[3])).approve(zeroExProxy, uint(data[11])); //TODO perhaps do a transfer from using tx.origin?
 
     uint value = exchange.fillOrder(
       [address(data[0]), address(data[1]), address(data[2]), address(data[3]), address(data[4])],
