@@ -9,7 +9,7 @@ contract ZeroExSubContract is SubContract {
   Exchange public exchange;
   address public zeroExProxy;
 
-  function ZeroExSubContract(address _exchange, address _proxy, string _dataTypes) {
+  constructor(address _exchange, address _proxy, string _dataTypes) public {
     exchange = Exchange(_exchange);
     zeroExProxy = _proxy;
     dataTypes = _dataTypes;

@@ -10,7 +10,7 @@ contract ParameterTest {
 
     bytes32[] data;
 
-    function testParametersAccepted() {
+    function testParametersAccepted() public {
         OrderGateway gateway = new OrderGateway();
         ZeroExSubContract zesc = new ZeroExSubContract(0x48BaCB9266a570d521063EF5dD96e61686DbE788, 0x0000000000000000000000000000000000000000, "");
 
