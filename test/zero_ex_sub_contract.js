@@ -81,7 +81,8 @@ contract('ZeroExSubContract', async function(accounts) {
 
     await orderGateway.participate(
       zeroExSubContract.address,
-      input
+      input,
+      { from: accounts[2] }
     );
 
 
