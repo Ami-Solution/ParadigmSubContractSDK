@@ -52,13 +52,8 @@ contract('ZeroExSubContract', async function(accounts) {
       makerTokenAmount: ZeroEx.toBaseUnitAmount(new BigNumber(0.2), 18), // Base 18 decimals
       takerTokenAmount: ZeroEx.toBaseUnitAmount(new BigNumber(0.3), 18), // Base 18 decimals
       expirationUnixTimestampSec: new BigNumber(Date.now() + 3600000)
-
     };
-
-    await tokenB.approve(paradigmBank, order.takerTokenAmount, { from: accounts[2] });
-
     const ecSignature = await zeroEx.signOrderHashAsync(ZeroEx.getOrderHashHex(order), accounts[1], false);
-
     const input = ParadigmJS.utils.toContractInput(zeroExSubContractDataTypes,
       [
         order.maker,
@@ -81,6 +76,8 @@ contract('ZeroExSubContract', async function(accounts) {
       ],
       { from: accounts[2] }
     );
+
+    await tokenB.approve(paradigmBank, order.takerTokenAmount, { from: accounts[2] });
 
     await orderGateway.participate(
       zeroExSubContract.address,
