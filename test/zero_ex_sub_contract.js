@@ -60,27 +60,27 @@ contract('ZeroExSubContract', async function(accounts) {
     const ecSignature = await zeroEx.signOrderHashAsync(ZeroEx.getOrderHashHex(order), accounts[1], false);
 
     const input = ParadigmJS.utils.toContractInput(zeroExSubContractDataTypes,
-        [
-          order.maker,
-          order.taker,
-          order.makerTokenAddress,
-          order.takerTokenAddress,
-          order.feeRecipient,
-          order.makerTokenAmount,
-          order.takerTokenAmount,
-          order.makerFee,
-          order.takerFee,
-          order.expirationUnixTimestampSec,
-          order.salt,
-          order.takerTokenAmount,
-          false,
-          ecSignature.v,
-          ecSignature.r,
-          ecSignature.s,
-          accounts[2]
-        ],
+      [
+        order.maker,
+        order.taker,
+        order.makerTokenAddress,
+        order.takerTokenAddress,
+        order.feeRecipient,
+        order.makerTokenAmount,
+        order.takerTokenAmount,
+        order.makerFee,
+        order.takerFee,
+        order.expirationUnixTimestampSec,
+        order.salt,
+        order.takerTokenAmount,
+        false,
+        ecSignature.v,
+        ecSignature.r,
+        ecSignature.s,
+        accounts[2]
+      ],
       { from: accounts[2] }
-      );
+    );
 
     await orderGateway.participate(
       zeroExSubContract.address,
