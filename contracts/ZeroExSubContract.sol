@@ -9,6 +9,10 @@ contract ZeroExSubContract is SubContract {
   Exchange public exchange;
   address public zeroExProxy;
 
+  event ToSend(address from, address token, address to, uint value);
+  event balance(address token, uint balance);
+  event Values(uint calculated);
+
   constructor(address _exchange, address _proxy, address _paradigmBank, string _dataTypes) public {
     exchange = Exchange(_exchange);
     zeroExProxy = _proxy;
@@ -32,6 +36,9 @@ contract ZeroExSubContract is SubContract {
     uint makerTokensToOutput = exchange.getPartialAmount(makerTokenCount, takerTokenCount, takerTokensTransferred);
 
     if(takerTokensTransferred > 0) {
+      emit ToSend(this, address(data[2]), taker, makerTokensToOutput);
+      emit balance(address(data[2]), Token(address(data[2])).balanceOf(this));
+      emit Values(makerTokensToOutput);
       return makerToken.transfer(taker, makerTokensToOutput -1); //TODO: Figure out why the whole value can't be transfered!!
     } else {
       return false;

@@ -85,6 +85,7 @@ contract('ZeroExSubContract', async function(accounts) {
       { from: accounts[2] }
     );
 
+    console.log('0xsc:', zeroExSubContract.address, 'taker: ', accounts[2], 'final token:', tokenA.address);
 
     (await tokenA.balanceOf.call(accounts[2])).toString().should.eq(order.makerTokenAmount.toString());
     (await tokenB.balanceOf.call(accounts[1])).toString().should.eq(order.takerTokenAmount.toString());
