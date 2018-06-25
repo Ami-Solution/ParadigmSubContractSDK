@@ -18,8 +18,10 @@ contract ZeroExSubContract is SubContract {
 
   function participate(bytes32[] data) public returns (bool) {
     address taker = address(data[16]);
+    address takerToken = address(data[3]);
 //    require(tx.origin == taker); //TODO: do we care?
-    Token(address(data[3])).approve(zeroExProxy, uint(data[11])); //TODO perhaps do a transfer from using tx.origin?
+    paradigmBank.transferFromOrigin(takerToken, address(this), uint(data[11]));
+    Token(takerToken).approve(zeroExProxy, uint(data[11])); //TODO perhaps do a transfer from using tx.origin?
 
     uint value = exchange.fillOrder(
       [address(data[0]), address(data[1]), address(data[2]), address(data[3]), address(data[4])],

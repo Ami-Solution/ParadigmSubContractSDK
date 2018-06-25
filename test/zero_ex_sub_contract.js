@@ -7,13 +7,14 @@ const ZeroExSubContractConfig = require('../configuration/ZeroExSubContract');
 const ParadigmJS = require('paradigm.js');
 
 contract('ZeroExSubContract', async function(accounts) {
-  let tokenA, tokenB, orderGateway, zeroExSubContract, zeroExSubContractDataTypes, zeroEx,
+  let tokenA, tokenB, orderGateway, paradigmBank, zeroExSubContract, zeroExSubContractDataTypes, zeroEx,
     WETH_ADDRESS, ZRX_ADDRESS, EXCHANGE_ADDRESS, PROXY;
 
   before(async () => {
     tokenA = await Token.new("TokenA", 'TKA', { from: accounts[1] });
     tokenB = await Token.new("TokenB", 'TKB', { from: accounts[2] });
     orderGateway = await OrderGateway.deployed();
+    paradigmBank = await orderGateway.paradigmBank.call();
     zeroExSubContract = await ZeroExSubContract.deployed();
     zeroExSubContractDataTypes = JSON.parse(await orderGateway.dataTypes.call(zeroExSubContract.address));
     zeroEx = new ZeroEx(web3.currentProvider, { networkId: 50 });
@@ -54,7 +55,7 @@ contract('ZeroExSubContract', async function(accounts) {
 
     };
 
-    await tokenB.transfer(zeroExSubContract.address, order.takerTokenAmount, { from: accounts[2] });
+    await tokenB.approve(paradigmBank, order.takerTokenAmount, { from: accounts[2] });
 
     const ecSignature = await zeroEx.signOrderHashAsync(ZeroEx.getOrderHashHex(order), accounts[1], false);
 
