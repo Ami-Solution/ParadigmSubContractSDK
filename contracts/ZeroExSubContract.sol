@@ -18,15 +18,21 @@ contract ZeroExSubContract is SubContract {
 
   function participate(bytes32[] data) public returns (bool) {
     address taker = address(data[16]);
-    address takerToken = address(data[3]);
-//    require(tx.origin == taker); //TODO: do we care?
-    paradigmBank.transferFromOrigin(takerToken, address(this), uint(data[11]));
-    Token(takerToken).approve(zeroExProxy, uint(data[11])); //TODO perhaps do a transfer from using tx.origin?
+    Token takerToken = Token(address(data[3]));
+    Token makerToken = Token(address(data[2]));
+    uint takerTokenToTrade = uint(data[11]);
+    uint makerTokenCount = uint(data[5]);
+    uint takerTokenCount = uint(data[6]);
 
-    uint value = fillOrder(data);
+    paradigmBank.transferFromOrigin(takerToken, address(this), takerTokenToTrade);
 
-    if(value > 0) {
-      return Token(address(data[2])).transfer(taker, exchange.getPartialAmount(uint(data[5]), uint(data[6]), value));
+    takerToken.approve(zeroExProxy, uint(data[11])); //TODO perhaps do a transfer from using tx.origin?
+
+    uint takerTokensTransferred = fillOrder(data);
+    uint makerTokensToOutput = exchange.getPartialAmount(makerTokenCount, takerTokenCount, takerTokensTransferred);
+
+    if(takerTokensTransferred > 0) {
+      return makerToken.transfer(taker, makerTokensToOutput -1); //TODO: Figure out why the whole value can't be transfered!!
     } else {
       return false;
     }
