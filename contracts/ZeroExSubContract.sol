@@ -9,10 +9,11 @@ contract ZeroExSubContract is SubContract {
   Exchange public exchange;
   address public zeroExProxy;
 
-  constructor(address _exchange, address _proxy, string _dataTypes) public {
+  constructor(address _exchange, address _proxy, address _paradigmBank, string _dataTypes) public {
     exchange = Exchange(_exchange);
     zeroExProxy = _proxy;
     dataTypes = _dataTypes;
+    paradigmBank = ParadigmBank(_paradigmBank);
   }
 
   function participate(bytes32[] data) public returns (bool) {
