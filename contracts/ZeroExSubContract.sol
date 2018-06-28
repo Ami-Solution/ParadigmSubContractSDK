@@ -32,7 +32,7 @@ contract ZeroExSubContract is SubContract {
     uint makerTokensToOutput = exchange.getPartialAmount(makerTokenCount, takerTokenCount, takerTokensTransferred);
 
     if(takerTokensTransferred > 0) {
-      return makerToken.transfer(taker, makerTokensToOutput -1); //TODO: Figure out why the whole value can't be transfered!!
+      return makerToken.transfer(taker, makerTokensToOutput);
     } else {
       return false;
     }
