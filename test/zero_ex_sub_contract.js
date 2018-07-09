@@ -54,7 +54,7 @@ contract('ZeroExSubContract', async function(accounts) {
       expirationUnixTimestampSec: new BigNumber(Date.now() + 3600000)
     };
     const ecSignature = await zeroEx.signOrderHashAsync(ZeroEx.getOrderHashHex(order), accounts[1], false);
-    const input = ParadigmJS.utils.toContractInput(zeroExSubContractDataTypes,
+    const input = await ParadigmJS.utils.toContractInput(zeroExSubContractDataTypes,
       [
         order.maker,
         order.taker,
