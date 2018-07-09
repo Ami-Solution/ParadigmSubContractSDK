@@ -14,8 +14,8 @@ contract('ParadigmBank', async (accounts) => {
 
   it('should allow transferFromSignature on valid signatures', async () => {
     //address token, address from, address to, uint value
-    const dataTypes = ['address', 'address', 'address', 'uint'];
-    const data = [tokenA.address, accounts[1], accounts[0], '1000'];
+    const dataTypes = ['address', 'address', 'address', 'address', 'uint'];
+    const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000'];
 
     const messageSignature = await paradigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
 
@@ -31,5 +31,25 @@ contract('ParadigmBank', async (accounts) => {
       messageSignature[1][2]
     );
     (await tokenA.balanceOf.call(accounts[0])).toString().should.eq('1000');
+  });
+
+  it('shouldn\'t allow transferFromSignature from invalid msg.sender', async () => {
+    //address token, address from, address to, uint value
+    const dataTypes = ['address', 'address', 'address', 'address', 'uint'];
+    const data = [accounts[1], tokenA.address, accounts[1], accounts[0], '1000'];
+
+    const messageSignature = await paradigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
+
+    await tokenA.approve(paradigmBank.address, '1000', { from: accounts[1] });
+
+    paradigmBank.transferFromSignature(
+      tokenA.address,
+      accounts[1],
+      accounts[0],
+      1000,
+      messageSignature[1][0],
+      messageSignature[1][1],
+      messageSignature[1][2]
+    ).should.eventually.be.rejected;
   })
 });

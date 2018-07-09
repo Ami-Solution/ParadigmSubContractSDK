@@ -14,7 +14,7 @@ contract ParadigmBank {
     }
 
     function validateSignature(address token, address from, address to, uint value, uint8 v, bytes32 r, bytes32 s) returns (bool) {
-        bytes32 hash = keccak256("\x19Ethereum Signed Message:\n32", keccak256(token, from, to, value));
+        bytes32 hash = keccak256("\x19Ethereum Signed Message:\n32", keccak256(msg.sender, token, from, to, value));
         address recoveredAddress = ecrecover(hash, v, r, s);
 
         return from ==  recoveredAddress;
