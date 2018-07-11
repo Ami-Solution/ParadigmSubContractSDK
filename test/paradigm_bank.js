@@ -26,9 +26,9 @@ contract('ParadigmBank', async (accounts) => {
       accounts[1],
       accounts[0],
       1000,
-      messageSignature[1][0],
-      messageSignature[1][1],
-      messageSignature[1][2]
+      messageSignature.signature.v,
+      messageSignature.signature.r,
+      messageSignature.signature.s
     );
     (await tokenA.balanceOf.call(accounts[0])).toString().should.eq('1000');
   });
@@ -47,9 +47,9 @@ contract('ParadigmBank', async (accounts) => {
       accounts[1],
       accounts[0],
       1000,
-      messageSignature[1][0],
-      messageSignature[1][1],
-      messageSignature[1][2]
+      messageSignature.signature.v,
+      messageSignature.signature.r,
+      messageSignature.signature.s
     ).should.eventually.be.rejected;
   })
 });

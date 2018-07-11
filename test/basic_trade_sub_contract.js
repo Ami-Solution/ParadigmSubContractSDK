@@ -17,18 +17,17 @@ contract('BasicTradeSubContract', async (accounts) => {
   });
 
   it('should allow a signed order to be traded', async () => {
-    const order = [
-      accounts[0],
-      tokenA.address,
-      '1000',
-      accounts[1],
-      tokenB.address,
-      '500',
-      '500'
-    ];
+    const order = {
+      'signer': accounts[0],
+      'signerToken': tokenA.address,
+      'signerTokenCount': '1000',
+      'buyer': accounts[1],
+      'buyerToken': tokenB.address,
+      'buyerTokenCount': '500',
+      'tokensToBuy': '500'
+    };
 
     const data = await paradigmJS.utils.toContractInput(basicTradeSubContractDataTypes, order, web3.currentProvider, accounts[0]);
-    console.log(data);
 
     console.log(await orderGateway.participate.call(basicTradeSubContract.address, data, {from: accounts[1] }));
   })

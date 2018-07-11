@@ -39,7 +39,7 @@ contract('ZeroExSubContract', async function(accounts) {
   });
 
   it('should handle a very basic transfer', async () => {
-    const order = {
+    const zeroExOrder = {
       maker: accounts[1],
       taker: ZeroEx.NULL_ADDRESS,
       feeRecipient: ZeroEx.NULL_ADDRESS,
@@ -53,31 +53,29 @@ contract('ZeroExSubContract', async function(accounts) {
       takerTokenAmount: ZeroEx.toBaseUnitAmount(new BigNumber(0.3), 18), // Base 18 decimals
       expirationUnixTimestampSec: new BigNumber(Date.now() + 3600000)
     };
-    const ecSignature = await zeroEx.signOrderHashAsync(ZeroEx.getOrderHashHex(order), accounts[1], false);
+
+    let order = {};
+
+    Object.keys(zeroExOrder).forEach((key) => {
+      order[`order${key.replace(/^\w/, c => c.toUpperCase())}`] = zeroExOrder[key];
+    });
+
+    const ecSignature = await zeroEx.signOrderHashAsync(ZeroEx.getOrderHashHex(zeroExOrder), accounts[1], false);
+    const preparedOrder = {
+      ...order,
+      signatureV: ecSignature.v,
+      signatureR: ecSignature.r,
+      signatureS: ecSignature.s,
+      tokensToTake: zeroExOrder.takerTokenAmount,
+      throwOnError: false,
+      makerTokenReceiver: accounts[2]
+    };
     const input = await ParadigmJS.utils.toContractInput(zeroExSubContractDataTypes,
-      [
-        order.maker,
-        order.taker,
-        order.makerTokenAddress,
-        order.takerTokenAddress,
-        order.feeRecipient,
-        order.makerTokenAmount,
-        order.takerTokenAmount,
-        order.makerFee,
-        order.takerFee,
-        order.expirationUnixTimestampSec,
-        order.salt,
-        order.takerTokenAmount,
-        false,
-        ecSignature.v,
-        ecSignature.r,
-        ecSignature.s,
-        accounts[2]
-      ],
+      preparedOrder,
       { from: accounts[2] }
     );
 
-    await tokenB.approve(paradigmBank, order.takerTokenAmount, { from: accounts[2] });
+    await tokenB.approve(paradigmBank, preparedOrder.tokensToTake, { from: accounts[2] });
 
     await orderGateway.participate(
       zeroExSubContract.address,
@@ -86,8 +84,8 @@ contract('ZeroExSubContract', async function(accounts) {
     );
 
 
-    (await tokenA.balanceOf.call(accounts[2])).toString().should.eq(order.makerTokenAmount.toString());
-    (await tokenB.balanceOf.call(accounts[1])).toString().should.eq(order.takerTokenAmount.toString());
+    (await tokenA.balanceOf.call(accounts[2])).toString().should.eq(zeroExOrder.makerTokenAmount.toString());
+    (await tokenB.balanceOf.call(accounts[1])).toString().should.eq(zeroExOrder.takerTokenAmount.toString());
   });
 
   it('should provide the input datatypes', async () => {
