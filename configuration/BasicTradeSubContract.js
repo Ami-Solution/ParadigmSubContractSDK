@@ -1,11 +1,11 @@
 exports.dataTypes = [
-  { 'dataType': "address", 'name': "signer"},
-  { 'dataType': "address", 'name': "signerToken"},
-  { 'dataType': "uint", 'name': "signerTokenCount"},
-  { 'dataType': "address", 'name': "buyer"},
-  { 'dataType': "address", 'name': "buyerToken"},
-  { 'dataType': "uint", 'name': "buyerTokenCount"},
-  { 'dataType': "uint", 'name': "tokensToBuy"},
+  { 'dataType': "address", 'name': "signer", 'makerData': true },
+  { 'dataType': "address", 'name': "signerToken", 'makerData': true },
+  { 'dataType': "uint", 'name': "signerTokenCount", 'makerData': true },
+  { 'dataType': "address", 'name': "buyer", 'makerData': true },
+  { 'dataType': "address", 'name': "buyerToken", 'makerData': true },
+  { 'dataType': "uint", 'name': "buyerTokenCount", 'makerData': true },
+  { 'dataType': "uint", 'name': "toensToBuy"},
   { 'dataType': "signature", 'signatureFields': [0, 1, 2, 3, 4, 5]}
 ];
 
