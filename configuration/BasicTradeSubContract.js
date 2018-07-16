@@ -5,7 +5,7 @@ exports.dataTypes = [
   { 'dataType': "address", 'name': "buyer", 'makerData': true },
   { 'dataType': "address", 'name': "buyerToken", 'makerData': true },
   { 'dataType': "uint", 'name': "buyerTokenCount", 'makerData': true },
-  { 'dataType': "uint", 'name': "toensToBuy"},
+  { 'dataType': "uint", 'name': "tokensToBuy"},
   { 'dataType': "signature", 'signatureFields': [0, 1, 2, 3, 4, 5]}
 ];
 
