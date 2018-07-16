@@ -10,10 +10,10 @@ exports.dataTypes = [
   {'dataType': "uint", 'name': "orderTakerFee", 'makerData': true },
   {'dataType': "uint", 'name': "orderExpirationUnixTimestampSec", 'makerData': true },
   {'dataType': "uint", 'name': "orderSalt", 'makerData': true },
+  {'dataType': "uint", 'name': "tokensToTake" },
+  {'dataType': "bool", 'name': "throwOnError" },
   {'dataType': "uint8", 'name': "signatureV", 'makerData': true },
   {'dataType': "bytes32", 'name': "signatureR", 'makerData': true },
   {'dataType': "bytes32", 'name': "signatureS", 'makerData': true },
-  {'dataType': "uint", 'name': "tokensToTake" },
-  {'dataType': "bool", 'name': "throwOnError" },
   {'dataType': "address", 'name': "makerTokenReceiver" }
 ];
