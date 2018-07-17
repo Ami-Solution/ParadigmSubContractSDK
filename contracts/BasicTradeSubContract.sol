@@ -1,6 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "./SubContract.sol";
+import "./SignatureVerification.sol";
 import "./Token.sol";
 
 contract BasicTradeSubContract is SubContract {
@@ -8,52 +9,37 @@ contract BasicTradeSubContract is SubContract {
     mapping(bytes32 => uint) bought;
 
     constructor(address _paradigmBank, string _dataTypes) {
-        paradigmBank = ParadigmBank(_paradigmBank);
-        dataTypes = _dataTypes;
+      paradigmBank = ParadigmBank(_paradigmBank);
+      dataTypes = _dataTypes;
+      verifier = new SignatureVerification();
     }
 
     function participate(bytes32[] data) public returns (bool) {
-        require(validate(data));
-//        transfer a -> b
-//        transfer b->a
+      // 1. Standard validation
+      require(verifier.verify(data, this));
 
-        return false;
+      // 2. Contract specific validation
+      uint signerTokenCount = uint(data[2]);
+      uint buyerTokenCountToTrade = uint(data[5]);
+      require(bought[getOrderHash(data)] + buyerTokenCountToTrade < signerTokenCount);
+
+      // transfer a -> b
+      // transfer b -> a
+
+      return true;
     }
 
-    function validate(bytes32[] data) public returns (bool) {
-        address signer = address(data[0]);
-        address signerToken = address(data[1]);
-        uint signerTokenCount = uint(data[2]);
-        address buyer = address(data[3]);
-        address buyerToken = address(data[4]);
-        uint buyerTokenCount = uint(data[5]);
-        uint buyerTokenCountToTrade = uint(data[5]);
-        uint8 v = uint8(data[7]);
-        bytes32 r = data[8];
-        bytes32 s = data[9];
-
-        //TODO: validate remaining tokens
-        bytes32 message = paramHash(signer, signerToken, signerTokenCount, buyer, buyerToken, buyerTokenCount);
-        if(bought[message] + buyerTokenCountToTrade < signerTokenCount) { //TODO: safemath
-            return validateSignature(signer, message, v, r, s);
-        } else {
-            return false;
-        }
+    function getSigner(bytes32[] data) view public returns (address) {
+      return address(data[0]);
     }
 
-    function paramHash(
-        address signer, address signerToken, uint signerTokenCount, address buyer,
-        address buyerToken, uint buyerTokenCount
-    ) returns (bytes32)
-    {
-        return keccak256(signer, signerToken, signerTokenCount, buyer, buyerToken, buyerTokenCount);
+    function getOrderHash(bytes32[] data) returns (bytes32) {
+      address signerToken = address(data[1]);
+      uint signerTokenCount = uint(data[2]);
+      address buyer = address(data[3]);
+      address buyerToken = address(data[4]);
+      uint buyerTokenCount = uint(data[5]);
+      return keccak256(getSigner(data), signerToken, signerTokenCount, buyer, buyerToken, buyerTokenCount);
     }
 
-    function validateSignature(address signer, bytes32 message, uint8 v, bytes32 r, bytes32 s
-    ) returns (bool) {
-        bytes32 hash = keccak256("\x19Ethereum Signed Message:\n32", message);
-        address recoveredAddress = ecrecover(hash, v, r, s);
-
-        return signer ==  recoveredAddress;
-    }
 }
