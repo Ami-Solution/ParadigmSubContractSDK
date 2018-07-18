@@ -29,6 +29,9 @@ contract('BasicTradeSubContract', async (accounts) => {
 
     const data = await paradigmJS.utils.toContractInput(basicTradeSubContractDataTypes, order, web3.currentProvider, accounts[0]);
 
+    (await orderGateway.participate.estimateGas(basicTradeSubContract.address, data, {from: accounts[1] })).should.be.lt(44000, "Gas cost increased");
+    console.log(await orderGateway.participate.estimateGas(basicTradeSubContract.address, data, {from: accounts[1] }));
+
     console.log(await orderGateway.participate.call(basicTradeSubContract.address, data, {from: accounts[1] }));
   })
 });
