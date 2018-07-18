@@ -29,10 +29,6 @@ contract BasicTradeSubContract is SubContract {
       return true;
     }
 
-    function getSigner(bytes32[] data) view public returns (address) {
-      return address(data[0]);
-    }
-
     function getOrderHash(bytes32[] data) returns (bytes32) {
       address signerToken = address(data[1]);
       uint signerTokenCount = uint(data[2]);
