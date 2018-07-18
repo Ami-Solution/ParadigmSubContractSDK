@@ -4,19 +4,18 @@ import "./SubContract.sol";
 import "./SignatureVerification.sol";
 import "./Token.sol";
 
-contract BasicTradeSubContract is SubContract {
+contract BasicTradeSubContract is SubContract, SignatureVerification {
 
     mapping(bytes32 => uint) bought;
 
     constructor(address _paradigmBank, string _dataTypes) {
       paradigmBank = ParadigmBank(_paradigmBank);
       dataTypes = _dataTypes;
-      verifier = new SignatureVerification();
     }
 
     function participate(bytes32[] data) public returns (bool) {
       // 1. Standard validation
-      require(verifier.verify(data, this));
+      require(verify(data));
 
       // 2. Contract specific validation
       uint signerTokenCount = uint(data[2]);
