@@ -1,8 +1,14 @@
 pragma solidity ^0.4.24;
 
-import "./SubContract.sol";
+contract SignatureVerification {
 
-contract SignatureVerification is SubContract {
+  function getSigner(bytes32[] data) view public returns (address) {
+    return address(data[0]);
+  }
+
+  function getOrderHash(bytes32[] data) returns (bytes32) {
+    return keccak256(getSigner(data));
+  }
 
   function verify(bytes32[] data) returns (bool) {
     uint8   v = uint8(data[data.length - 3]);
