@@ -19,9 +19,10 @@ contract ParadigmBank {
         uint signedValue,
         uint8 v,
         bytes32 r,
-        bytes32 s
+        bytes32 s,
+        uint nonce
     ) public returns (bool) {
-        bytes32 hash = signatureHash(token, from, signedTo, signedValue);
+        bytes32 hash = signatureHash(token, from, signedTo, signedValue, nonce);
         require(validateSignature(hash, from, v, r, s)); //TODO to signedTo may not be clean enough
         require(signedTo == to || signedTo == 0x0 );
         require(value <= signedValue);
@@ -31,8 +32,8 @@ contract ParadigmBank {
         return Token(token).transferFrom(from, to, value);
     }
 
-    function signatureHash(address token, address from, address signedTo, uint signedValue) internal returns (bytes32){
-        return keccak256("\x19Ethereum Signed Message:\n32", keccak256(msg.sender, token, from, signedTo, signedValue));
+    function signatureHash(address token, address from, address signedTo, uint signedValue, uint nonce) internal returns (bytes32){
+        return keccak256("\x19Ethereum Signed Message:\n32", keccak256(msg.sender, token, from, signedTo, signedValue, nonce));
     }
 
     function validateSignature(bytes32 hash, address from, uint8 v, bytes32 r, bytes32 s) internal returns (bool) {
