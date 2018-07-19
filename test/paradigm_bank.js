@@ -26,10 +26,96 @@ contract('ParadigmBank', async (accounts) => {
       accounts[1],
       accounts[0],
       1000,
+      accounts[0],
+      1000,
       messageSignature.signature.v,
       messageSignature.signature.r,
       messageSignature.signature.s
     );
+    (await tokenA.balanceOf.call(accounts[0])).toString().should.eq('1000');
+  });
+
+  it('should allow 2 transferFromSignature on valid signatures', async () => {
+    //address token, address from, address to, uint value
+    const dataTypes = ['address', 'address', 'address', 'address', 'uint'];
+    const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000'];
+
+    const messageSignature = await paradigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
+
+    await tokenA.approve(paradigmBank.address, '1000', { from: accounts[1] });
+
+    await paradigmBank.transferFromSignature(
+      tokenA.address,
+      accounts[1],
+      accounts[0],
+      500,
+      accounts[0],
+      1000,
+      messageSignature.signature.v,
+      messageSignature.signature.r,
+      messageSignature.signature.s
+    );
+
+    await paradigmBank.transferFromSignature(
+      tokenA.address,
+      accounts[1],
+      accounts[0],
+      500,
+      accounts[0],
+      1000,
+      messageSignature.signature.v,
+      messageSignature.signature.r,
+      messageSignature.signature.s
+    );
+
+    (await tokenA.balanceOf.call(accounts[0])).toString().should.eq('1000');
+  });
+
+  it('should allow 3 transferFromSignature on valid signatures', async () => {
+    //address token, address from, address to, uint value
+    const dataTypes = ['address', 'address', 'address', 'address', 'uint'];
+    const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000'];
+
+    const messageSignature = await paradigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
+
+    await tokenA.approve(paradigmBank.address, '1000', { from: accounts[1] });
+
+    await paradigmBank.transferFromSignature(
+      tokenA.address,
+      accounts[1],
+      accounts[0],
+      300,
+      accounts[0],
+      1000,
+      messageSignature.signature.v,
+      messageSignature.signature.r,
+      messageSignature.signature.s
+    );
+
+    await paradigmBank.transferFromSignature(
+      tokenA.address,
+      accounts[1],
+      accounts[0],
+      300,
+      accounts[0],
+      1000,
+      messageSignature.signature.v,
+      messageSignature.signature.r,
+      messageSignature.signature.s
+    );
+
+    await paradigmBank.transferFromSignature(
+      tokenA.address,
+      accounts[1],
+      accounts[0],
+      400,
+      accounts[0],
+      1000,
+      messageSignature.signature.v,
+      messageSignature.signature.r,
+      messageSignature.signature.s
+    );
+
     (await tokenA.balanceOf.call(accounts[0])).toString().should.eq('1000');
   });
 
@@ -45,6 +131,8 @@ contract('ParadigmBank', async (accounts) => {
     paradigmBank.transferFromSignature(
       tokenA.address,
       accounts[1],
+      accounts[0],
+      1000,
       accounts[0],
       1000,
       messageSignature.signature.v,
