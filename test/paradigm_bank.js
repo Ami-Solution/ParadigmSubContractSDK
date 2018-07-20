@@ -14,7 +14,6 @@ contract('ParadigmBank', async (accounts) => {
 
   it('should allow transferFromSignature on valid signatures', async () => {
     //address token, address from, address to, uint value
-    //TODO need a nonce
     const dataTypes = ['address', 'address', 'address', 'address', 'uint', 'uint'];
     const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 1];
 

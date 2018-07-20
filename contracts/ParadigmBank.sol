@@ -4,7 +4,7 @@ import "./Token.sol";
 
 contract ParadigmBank {
 
-    mapping(bytes32 => uint) remaining; //TODO Bytes 32 may have overlap
+    mapping(bytes32 => uint) remaining;
 
     function transferFromOrigin(address token, address to, uint value) public returns (bool) {
         return Token(token).transferFrom(tx.origin, to, value);
@@ -23,7 +23,7 @@ contract ParadigmBank {
         uint nonce
     ) public returns (bool) {
         bytes32 hash = signatureHash(token, from, signedTo, signedValue, nonce);
-        require(validateSignature(hash, from, v, r, s)); //TODO to signedTo may not be clean enough
+        require(validateSignature(hash, from, v, r, s));
         require(signedTo == to || signedTo == 0x0 );
         require(value <= signedValue);
         require(value + remaining[hash] <= signedValue);

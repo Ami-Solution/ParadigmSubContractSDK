@@ -26,7 +26,7 @@ contract ZeroExSubContract is SubContract {
 
     paradigmBank.transferFromOrigin(takerToken, address(this), takerTokenToTrade);
 
-    takerToken.approve(zeroExProxy, uint(data[11])); //TODO perhaps do a transfer from using tx.origin?
+    takerToken.approve(zeroExProxy, uint(data[11]));
 
     uint takerTokensTransferred = fillOrder(data);
     uint makerTokensToOutput = exchange.getPartialAmount(makerTokenCount, takerTokenCount, takerTokensTransferred);
