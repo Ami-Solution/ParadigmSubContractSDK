@@ -1,25 +1,24 @@
-const paradigmJS = require('paradigm.js');
+const ParadigmJS = require('paradigm.js');
 const Token = artifacts.require("./Token.sol");
 const OrderGateway = artifacts.require("./OrderGateway.sol");
 const ParadigmBank = artifacts.require("./ParadigmBank.sol");
 
 contract('ParadigmBank', async (accounts) => {
-  let tokenA, orderGateway, paradigmBank;
+  let tokenA, orderGateway, paradigmBank, paradigmJS;
 
   before(async () => {
     tokenA = await Token.new("TokenA", 'TKA', { from: accounts[1] });
     orderGateway = await OrderGateway.deployed();
     paradigmBank = ParadigmBank.at(await orderGateway.paradigmBank.call());
+    paradigmJS = new ParadigmJS({ provider: web3.currentProvider });
+    await paradigmJS.bank.giveMaxAllowanceFor(tokenA.address, paradigmBank.address, accounts[1]);
   });
 
   it('should allow transferFromSignature on valid signatures', async () => {
-    //address token, address from, address to, uint value
     const dataTypes = ['address', 'address', 'address', 'address', 'uint', 'uint'];
     const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 1];
 
-    const messageSignature = await paradigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
-
-    await tokenA.approve(paradigmBank.address, '1000', { from: accounts[1] });
+    const messageSignature = await ParadigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
     const startingBalance = await tokenA.balanceOf.call(accounts[0]);
 
     await paradigmBank.transferFromSignature(
@@ -42,9 +41,8 @@ contract('ParadigmBank', async (accounts) => {
     const dataTypes = ['address', 'address', 'address', 'address', 'uint', 'uint'];
     const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 2];
 
-    const messageSignature = await paradigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
+    const messageSignature = await ParadigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
 
-    await tokenA.approve(paradigmBank.address, '1000', { from: accounts[1] });
     const startingBalance = await tokenA.balanceOf.call(accounts[0]);
 
     await paradigmBank.transferFromSignature(
@@ -81,9 +79,8 @@ contract('ParadigmBank', async (accounts) => {
     const dataTypes = ['address', 'address', 'address', 'address', 'uint', 'uint'];
     const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 3];
 
-    const messageSignature = await paradigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
+    const messageSignature = await ParadigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
 
-    await tokenA.approve(paradigmBank.address, '1000', { from: accounts[1] });
     const startingBalance = await tokenA.balanceOf.call(accounts[0]);
 
     await paradigmBank.transferFromSignature(
@@ -133,9 +130,7 @@ contract('ParadigmBank', async (accounts) => {
     const dataTypes = ['address', 'address', 'address', 'address', 'uint'];
     const data = [accounts[1], tokenA.address, accounts[1], accounts[0], '1000'];
 
-    const messageSignature = await paradigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
-
-    await tokenA.approve(paradigmBank.address, '1000', { from: accounts[1] });
+    const messageSignature = await ParadigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
 
     paradigmBank.transferFromSignature(
       tokenA.address,
