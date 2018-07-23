@@ -15,133 +15,126 @@ contract('ParadigmBank', async (accounts) => {
   });
 
   it('should allow transferFromSignature on valid signatures', async () => {
-    const dataTypes = ['address', 'address', 'address', 'address', 'uint', 'uint'];
-    const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 1];
-
-    const messageSignature = await ParadigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
     const startingBalance = await tokenA.balanceOf.call(accounts[0]);
 
+    const data = paradigmJS.bank.createTransfer(accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 1);
+    const signedTransfer = await paradigmJS.bank.createSignedTransfer(data);
+
     await paradigmBank.transferFromSignature(
-      tokenA.address,
-      accounts[1],
+      signedTransfer.tokenAddress,
+      signedTransfer.tokenHolder,
       accounts[0],
       1000,
-      accounts[0],
-      1000,
-      messageSignature.signature.v,
-      messageSignature.signature.r,
-      messageSignature.signature.s,
-      1
+      signedTransfer.recipient,
+      signedTransfer.maxAmount,
+      signedTransfer.signature.v,
+      signedTransfer.signature.r,
+      signedTransfer.signature.s,
+      signedTransfer.nonce
     );
     (await tokenA.balanceOf.call(accounts[0])).toString().should.eq(startingBalance.add('1000').toString());
   });
 
   it('should allow 2 transferFromSignature on valid signatures', async () => {
-    //address token, address from, address to, uint value
-    const dataTypes = ['address', 'address', 'address', 'address', 'uint', 'uint'];
-    const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 2];
-
-    const messageSignature = await ParadigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
-
     const startingBalance = await tokenA.balanceOf.call(accounts[0]);
 
+    const data = paradigmJS.bank.createTransfer(accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 2);
+    const signedTransfer = await paradigmJS.bank.createSignedTransfer(data);
+
     await paradigmBank.transferFromSignature(
-      tokenA.address,
-      accounts[1],
+      signedTransfer.tokenAddress,
+      signedTransfer.tokenHolder,
       accounts[0],
       500,
-      accounts[0],
-      1000,
-      messageSignature.signature.v,
-      messageSignature.signature.r,
-      messageSignature.signature.s,
-      2
+      signedTransfer.recipient,
+      signedTransfer.maxAmount,
+      signedTransfer.signature.v,
+      signedTransfer.signature.r,
+      signedTransfer.signature.s,
+      signedTransfer.nonce
     );
 
     await paradigmBank.transferFromSignature(
-      tokenA.address,
-      accounts[1],
+      signedTransfer.tokenAddress,
+      signedTransfer.tokenHolder,
       accounts[0],
       500,
-      accounts[0],
-      1000,
-      messageSignature.signature.v,
-      messageSignature.signature.r,
-      messageSignature.signature.s,
-      2
+      signedTransfer.recipient,
+      signedTransfer.maxAmount,
+      signedTransfer.signature.v,
+      signedTransfer.signature.r,
+      signedTransfer.signature.s,
+      signedTransfer.nonce
     );
 
     (await tokenA.balanceOf.call(accounts[0])).toString().should.eq(startingBalance.add('1000').toString());
   });
 
   it('should allow 3 transferFromSignature on valid signatures', async () => {
-    //address token, address from, address to, uint value
-    const dataTypes = ['address', 'address', 'address', 'address', 'uint', 'uint'];
-    const data = [accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 3];
-
-    const messageSignature = await ParadigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
-
     const startingBalance = await tokenA.balanceOf.call(accounts[0]);
 
+    const data = paradigmJS.bank.createTransfer(accounts[0], tokenA.address, accounts[1], accounts[0], '1000', 3);
+    const signedTransfer = await paradigmJS.bank.createSignedTransfer(data);
+
+
     await paradigmBank.transferFromSignature(
-      tokenA.address,
-      accounts[1],
+      signedTransfer.tokenAddress,
+      signedTransfer.tokenHolder,
       accounts[0],
       300,
-      accounts[0],
-      1000,
-      messageSignature.signature.v,
-      messageSignature.signature.r,
-      messageSignature.signature.s,
-      3
+      signedTransfer.recipient,
+      signedTransfer.maxAmount,
+      signedTransfer.signature.v,
+      signedTransfer.signature.r,
+      signedTransfer.signature.s,
+      signedTransfer.nonce
     );
 
     await paradigmBank.transferFromSignature(
-      tokenA.address,
-      accounts[1],
+      signedTransfer.tokenAddress,
+      signedTransfer.tokenHolder,
       accounts[0],
       300,
-      accounts[0],
-      1000,
-      messageSignature.signature.v,
-      messageSignature.signature.r,
-      messageSignature.signature.s,
-      3
+      signedTransfer.recipient,
+      signedTransfer.maxAmount,
+      signedTransfer.signature.v,
+      signedTransfer.signature.r,
+      signedTransfer.signature.s,
+      signedTransfer.nonce
     );
 
     await paradigmBank.transferFromSignature(
-      tokenA.address,
-      accounts[1],
+      signedTransfer.tokenAddress,
+      signedTransfer.tokenHolder,
       accounts[0],
       400,
-      accounts[0],
-      1000,
-      messageSignature.signature.v,
-      messageSignature.signature.r,
-      messageSignature.signature.s,
-      3
+      signedTransfer.recipient,
+      signedTransfer.maxAmount,
+      signedTransfer.signature.v,
+      signedTransfer.signature.r,
+      signedTransfer.signature.s,
+      signedTransfer.nonce
     );
 
     (await tokenA.balanceOf.call(accounts[0])).toString().should.eq(startingBalance.add('1000').toString());
   });
 
   it('shouldn\'t allow transferFromSignature from invalid msg.sender', async () => {
-    //address token, address from, address to, uint value
-    const dataTypes = ['address', 'address', 'address', 'address', 'uint'];
-    const data = [accounts[1], tokenA.address, accounts[1], accounts[0], '1000'];
+    const data = paradigmJS.bank.createTransfer(accounts[1], tokenA.address, accounts[1], accounts[0], '1000', 4);
+    const signedTransfer = await paradigmJS.bank.createSignedTransfer(data);
 
-    const messageSignature = await ParadigmJS.messages.signMessage(dataTypes, data, web3.currentProvider, accounts[1]);
 
     paradigmBank.transferFromSignature(
-      tokenA.address,
-      accounts[1],
+      signedTransfer.tokenAddress,
+      signedTransfer.tokenHolder,
       accounts[0],
       1000,
-      accounts[0],
-      1000,
-      messageSignature.signature.v,
-      messageSignature.signature.r,
-      messageSignature.signature.s
+      signedTransfer.recipient,
+      signedTransfer.maxAmount,
+      signedTransfer.signature.v,
+      signedTransfer.signature.r,
+      signedTransfer.signature.s,
+      signedTransfer.nonce
     ).should.eventually.be.rejected;
   })
 });
