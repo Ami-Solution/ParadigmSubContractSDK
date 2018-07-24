@@ -10,6 +10,6 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "ganache-cli": "^6.1.6",
-    "paradigm.js": "0.0.5"
+    "paradigm.js": "0.0.6"
   }
 }
