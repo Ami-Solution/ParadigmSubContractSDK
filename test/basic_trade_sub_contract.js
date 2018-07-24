@@ -20,11 +20,11 @@ contract('BasicTradeSubContract', async (accounts) => {
   it('should allow a signed order to be traded', async () => {
     const signerData = paradigmJS.bank.createTransfer(basicTradeSubContract.address, tokenA.address, accounts[0], null, '1000', 0);
     const signerTransfer = await paradigmJS.bank.createSignedTransfer(signerData);
-    await tokenA.approve(basicTradeSubContract.address, '1000', { from: accounts[0] });
+    await paradigmJS.bank.giveMaxAllowanceFor(tokenA.address, paradigmBank.address, accounts[0]);
 
     const buyerData = paradigmJS.bank.createTransfer(basicTradeSubContract.address, tokenB.address, accounts[1], null, '500', 0);
     const buyerTransfer = await paradigmJS.bank.createSignedTransfer(buyerData);
-    await tokenB.approve(basicTradeSubContract.address, '500', { from: accounts[1] });
+    await paradigmJS.bank.giveMaxAllowanceFor(tokenB.address, paradigmBank.address, accounts[1]);
 
     const order = {
       'signer': accounts[0],
