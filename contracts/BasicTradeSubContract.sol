@@ -60,9 +60,9 @@ contract BasicTradeSubContract is SubContract, SignatureVerification {
         uint tokensTakerCount = 1;
 
         return paradigmBank.transferFromSignature(
-            address(data[1]),
+            address(data[4]),
+            address(data[3]),
             address(data[0]),
-            address(data[3]), //TODO: how do we get the taker address?  data[3]?
             uint(tokensTakerCount),
             address(data[13]),
             uint (data[14]),
