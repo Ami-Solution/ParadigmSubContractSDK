@@ -22,8 +22,10 @@ contract BasicTradeSubContract is SubContract, SignatureVerification {
       uint buyerTokenCountToTrade = uint(data[5]);
       require(bought[getOrderHash(data)] + buyerTokenCountToTrade < signerTokenCount);
 
-      // transfer a -> b
-      // transfer b -> a
+        // transfer a -> b
+        require(sendMaker(data));
+        // transfer b -> a
+        require(sendTaker(data));
 
       return true;
     }
@@ -37,4 +39,37 @@ contract BasicTradeSubContract is SubContract, SignatureVerification {
       return keccak256(getSigner(data), signerToken, signerTokenCount, buyer, buyerToken, buyerTokenCount);
     }
 
+    function sendMaker(bytes32[] data) returns (bool) {
+        uint tokensMakerCount = 10;
+
+        return paradigmBank.transferFromSignature(
+            address(data[1]),
+            address(data[0]),
+            address(data[3]), //TODO: how do we get the taker address?  data[3]?
+            uint(tokensMakerCount),
+            address(data[7]),
+            uint (data[8]),
+            uint8(data[9]),
+            bytes32(data[10]),
+            bytes32(data[11]),
+            uint(data[12])
+        );
+    }
+
+    function sendTaker(bytes32[] data) returns (bool) {
+        uint tokensTakerCount = 1;
+
+        return paradigmBank.transferFromSignature(
+            address(data[1]),
+            address(data[0]),
+            address(data[3]), //TODO: how do we get the taker address?  data[3]?
+            uint(tokensTakerCount),
+            address(data[13]),
+            uint (data[14]),
+            uint8(data[15]),
+            bytes32(data[16]),
+            bytes32(data[17]),
+            uint(data[18])
+        );
+    }
 }
