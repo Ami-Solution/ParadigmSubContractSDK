@@ -1,4 +1,4 @@
-const paradigmJS = require('paradigm.js');
+const ParadigmJS = require('paradigm.js');
 const Token = artifacts.require("./Token.sol");
 const OrderGateway = artifacts.require("./OrderGateway.sol");
 const ParadigmBank = artifacts.require("./ParadigmBank.sol");
@@ -6,6 +6,7 @@ const BasicTradeSubContract = artifacts.require('./BasicTradeSubContract.sol');
 
 contract('BasicTradeSubContract', async (accounts) => {
   let tokenA, tokenB, orderGateway, paradigmBank, basicTradeSubContract, basicTradeSubContractDataTypes;
+  const paradigmJS = new ParadigmJS({ provider: web3.currentProvider });
 
   before(async () => {
     tokenA = await Token.new("TokenA", 'TKA', { from: accounts[0] });
@@ -17,6 +18,14 @@ contract('BasicTradeSubContract', async (accounts) => {
   });
 
   it('should allow a signed order to be traded', async () => {
+    const signerData = paradigmJS.bank.createTransfer(basicTradeSubContract.address, tokenA.address, accounts[0], null, '1000', 0);
+    const signerTransfer = await paradigmJS.bank.createSignedTransfer(signerData);
+    await tokenA.approve(basicTradeSubContract.address, '1000', { from: accounts[0] });
+
+    const buyerData = paradigmJS.bank.createTransfer(basicTradeSubContract.address, tokenB.address, accounts[1], null, '500', 0);
+    const buyerTransfer = await paradigmJS.bank.createSignedTransfer(buyerData);
+    await tokenB.approve(basicTradeSubContract.address, '500', { from: accounts[1] });
+
     const order = {
       'signer': accounts[0],
       'signerToken': tokenA.address,
@@ -24,13 +33,15 @@ contract('BasicTradeSubContract', async (accounts) => {
       'buyer': accounts[1],
       'buyerToken': tokenB.address,
       'buyerTokenCount': '500',
-      'tokensToBuy': '500'
+      'tokensToBuy': '500',
+      signerTransfer,
+      buyerTransfer
     };
 
-    const data = await paradigmJS.utils.toContractInput(basicTradeSubContractDataTypes, order, web3.currentProvider, accounts[0]);
+    const data = await ParadigmJS.utils.toContractInput(basicTradeSubContractDataTypes, order, web3.currentProvider, accounts[0]);
 
-    (await orderGateway.participate.estimateGas(basicTradeSubContract.address, data, {from: accounts[1] })).should.be.lt(45000, "Gas cost increased");
+    console.log(await orderGateway.participate(basicTradeSubContract.address, data, {from: accounts[1] }));
 
-    console.log(await orderGateway.participate.call(basicTradeSubContract.address, data, {from: accounts[1] }));
+    (await orderGateway.participate.estimateGas(basicTradeSubContract.address, data, {from: accounts[1] })).should.be.lt(55000, "Gas cost increased");
   })
 });
