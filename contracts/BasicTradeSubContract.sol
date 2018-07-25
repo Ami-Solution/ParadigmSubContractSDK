@@ -40,13 +40,11 @@ contract BasicTradeSubContract is SubContract, SignatureVerification {
     }
 
     function sendMaker(bytes32[] data) returns (bool) {
-        uint tokensMakerCount = 10;
-
         return paradigmBank.transferFromSignature(
             address(data[1]),
             address(data[0]),
             address(data[3]), //TODO: how do we get the taker address?  data[3]?
-            uint(tokensMakerCount),
+            uint(data[6]),
             address(data[7]),
             uint (data[8]),
             uint8(data[9]),
@@ -57,7 +55,7 @@ contract BasicTradeSubContract is SubContract, SignatureVerification {
     }
 
     function sendTaker(bytes32[] data) returns (bool) {
-        uint tokensTakerCount = 1;
+        uint tokensTakerCount = ratioFor(uint(data[5]), uint(data[6]), uint(data[2]));
 
         return paradigmBank.transferFromSignature(
             address(data[4]),

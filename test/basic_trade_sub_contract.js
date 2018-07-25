@@ -40,8 +40,10 @@ contract('BasicTradeSubContract', async (accounts) => {
 
     const data = await ParadigmJS.utils.toContractInput(basicTradeSubContractDataTypes, order, web3.currentProvider, accounts[0]);
 
-    console.log(await orderGateway.participate(basicTradeSubContract.address, data, {from: accounts[1] }));
+    await orderGateway.participate(basicTradeSubContract.address, data, {from: accounts[1] });
 
-    (await orderGateway.participate.estimateGas(basicTradeSubContract.address, data, {from: accounts[1] })).should.be.lt(55000, "Gas cost increased");
+    (await orderGateway.participate.estimateGas(basicTradeSubContract.address, data, {from: accounts[1] })).should.be.lt(130000, "Gas cost increased");
+    (await tokenA.balanceOf(accounts[1])).toString().should.eq('500');
+    (await tokenB.balanceOf(accounts[0])).toString().should.eq('250');
   })
 });
