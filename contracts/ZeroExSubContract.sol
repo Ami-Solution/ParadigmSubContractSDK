@@ -9,26 +9,27 @@ contract ZeroExSubContract is SubContract {
   Exchange public exchange;
   address public zeroExProxy;
 
-  constructor(address _exchange, address _proxy, address _paradigmBank, string _dataTypes) public {
+  constructor(address _exchange, address _proxy, address _paradigmBank, string _makerDataTypes, string _takerDataTypes) public {
     exchange = Exchange(_exchange);
     zeroExProxy = _proxy;
-    dataTypes = _dataTypes;
+    makerDataTypes = _makerDataTypes;
+    takerDataTypes = _takerDataTypes;
     paradigmBank = ParadigmBank(_paradigmBank);
   }
 
-  function participate(bytes32[] data) public returns (bool) {
-    address taker = address(data[16]);
-    Token takerToken = Token(address(data[3]));
-    Token makerToken = Token(address(data[2]));
-    uint takerTokenToTrade = uint(data[11]);
-    uint makerTokenCount = uint(data[5]);
-    uint takerTokenCount = uint(data[6]);
+  function participate(bytes32[] makerData, bytes32[] takerData) public returns (bool) {
+    address taker = address(takerData[2]);
+    Token takerToken = Token(address(makerData[3]));
+    Token makerToken = Token(address(makerData[2]));
+    uint takerTokenToTrade = uint(takerData[0]);
+    uint makerTokenCount = uint(makerData[5]);
+    uint takerTokenCount = uint(makerData[6]);
 
     paradigmBank.transferFromOrigin(takerToken, address(this), takerTokenToTrade);
 
-    takerToken.approve(zeroExProxy, uint(data[11]));
+    takerToken.approve(zeroExProxy, uint(takerData[0]));
 
-    uint takerTokensTransferred = fillOrder(data);
+    uint takerTokensTransferred = fillOrder(makerData, takerData);
     uint makerTokensToOutput = exchange.getPartialAmount(makerTokenCount, takerTokenCount, takerTokensTransferred);
 
     if(takerTokensTransferred > 0) {
@@ -38,31 +39,31 @@ contract ZeroExSubContract is SubContract {
     }
   }
 
-  function fillOrder(bytes32[] data) internal returns (uint) {
+  function fillOrder(bytes32[] makerData, bytes32[] takerData) internal returns (uint) {
     return exchange.fillOrder(
-      getAddresses(data),
-      getNumbers(data),
-      uint(data[11]), uint(data[12]) != 0, uint8(data[13]), data[14], data[15]);
+      getAddresses(makerData),
+      getNumbers(makerData),
+      uint(takerData[0]), uint(takerData[1]) != 0, uint8(makerData[11]), makerData[12], makerData[13]);
   }
 
-  function getAddresses(bytes32[] data) internal pure returns (address[5]) {
+  function getAddresses(bytes32[] makerData) internal pure returns (address[5]) {
     address[5] memory addresses;
-    addresses[0] = address(data[0]);
-    addresses[1] = address(data[1]);
-    addresses[2] = address(data[2]);
-    addresses[3] = address(data[3]);
-    addresses[4] = address(data[4]);
+    addresses[0] = address(makerData[0]);
+    addresses[1] = address(makerData[1]);
+    addresses[2] = address(makerData[2]);
+    addresses[3] = address(makerData[3]);
+    addresses[4] = address(makerData[4]);
     return addresses;
   }
-  function getNumbers(bytes32[] data) internal pure returns (uint[6]) {
+  function getNumbers(bytes32[] makerData) internal pure returns (uint[6]) {
     uint[6] memory numbers;
 
-    numbers[0] = uint(data[5]);
-    numbers[1] = uint(data[6]);
-    numbers[2] = uint(data[7]);
-    numbers[3] = uint(data[8]);
-    numbers[4] = uint(data[9]);
-    numbers[5] = uint(data[10]);
+    numbers[0] = uint(makerData[5]);
+    numbers[1] = uint(makerData[6]);
+    numbers[2] = uint(makerData[7]);
+    numbers[3] = uint(makerData[8]);
+    numbers[4] = uint(makerData[9]);
+    numbers[5] = uint(makerData[10]);
 
     return numbers;
   }

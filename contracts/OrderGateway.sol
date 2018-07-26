@@ -13,11 +13,15 @@ contract OrderGateway {
         paradigmBank = new ParadigmBank();
     }
 
-    function participate(address subContract, bytes32[] data) public returns (bool) {
-        return SubContract(subContract).participate(data);
+    function participate(address subContract, bytes32[] makerData, bytes32[] takerData) public returns (bool) {
+        return SubContract(subContract).participate(makerData, takerData);
     }
 
-    function dataTypes(address subContract) public view returns (string) {
-        return SubContract(subContract).dataTypes();
+    function makerDataTypes(address subContract) public view returns (string) {
+        return SubContract(subContract).makerDataTypes();
+    }
+
+    function takerDataTypes(address subContract) public view returns (string) {
+        return SubContract(subContract).takerDataTypes();
     }
 }

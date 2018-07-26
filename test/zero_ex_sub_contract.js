@@ -7,7 +7,7 @@ const ZeroExSubContractConfig = require('../configuration/ZeroExSubContract');
 const ParadigmJS = require('paradigm.js');
 
 contract('ZeroExSubContract', async function(accounts) {
-  let tokenA, tokenB, orderGateway, paradigmBank, zeroExSubContract, zeroExSubContractDataTypes, zeroEx,
+  let tokenA, tokenB, orderGateway, paradigmBank, zeroExSubContract, zeroExSubContractMakerDataTypes, zeroExSubContractTakerDataTypes, zeroEx,
     WETH_ADDRESS, ZRX_ADDRESS, EXCHANGE_ADDRESS, PROXY;
 
   before(async () => {
@@ -16,7 +16,8 @@ contract('ZeroExSubContract', async function(accounts) {
     orderGateway = await OrderGateway.deployed();
     paradigmBank = await orderGateway.paradigmBank.call();
     zeroExSubContract = await ZeroExSubContract.deployed();
-    zeroExSubContractDataTypes = JSON.parse(await orderGateway.dataTypes.call(zeroExSubContract.address));
+    zeroExSubContractMakerDataTypes = JSON.parse(await orderGateway.makerDataTypes.call(zeroExSubContract.address));
+    zeroExSubContractTakerDataTypes = JSON.parse(await orderGateway.takerDataTypes.call(zeroExSubContract.address));
     zeroEx = new ZeroEx(web3.currentProvider, { networkId: 50 });
 
     WETH_ADDRESS = zeroEx.etherToken.getContractAddressIfExists();
@@ -65,21 +66,26 @@ contract('ZeroExSubContract', async function(accounts) {
       ...order,
       signatureV: ecSignature.v,
       signatureR: ecSignature.r,
-      signatureS: ecSignature.s,
+      signatureS: ecSignature.s
+    };
+    const take = {
       tokensToTake: zeroExOrder.takerTokenAmount,
       throwOnError: false,
       makerTokenReceiver: accounts[2]
     };
-    const input = await ParadigmJS.utils.toContractInput(zeroExSubContractDataTypes,
-      preparedOrder,
-      { from: accounts[2] }
-    );
 
-    await tokenB.approve(paradigmBank, preparedOrder.tokensToTake, { from: accounts[2] });
+    const makerData = await ParadigmJS.utils.toContractInput(zeroExSubContractMakerDataTypes,
+      preparedOrder,
+      { from: accounts[1] }
+    );
+    const takerData = await ParadigmJS.utils.toContractInput(zeroExSubContractTakerDataTypes, take, { from: accounts[1] });
+
+    await tokenB.approve(paradigmBank, take.tokensToTake, { from: accounts[2] });
 
     await orderGateway.participate(
       zeroExSubContract.address,
-      input,
+      makerData,
+      takerData,
       { from: accounts[2] }
     );
 
@@ -88,7 +94,8 @@ contract('ZeroExSubContract', async function(accounts) {
     (await tokenB.balanceOf.call(accounts[1])).toString().should.eq(zeroExOrder.takerTokenAmount.toString());
   });
 
-  it('should provide the input datatypes', async () => {
-    zeroExSubContractDataTypes.should.deep.equal(ZeroExSubContractConfig.dataTypes)
+  it('should provide the input dataTypes', async () => {
+    zeroExSubContractMakerDataTypes.should.deep.equal(ZeroExSubContractConfig.makerDataTypes);
+    zeroExSubContractTakerDataTypes.should.deep.equal(ZeroExSubContractConfig.takerDataTypes);
   });
 });

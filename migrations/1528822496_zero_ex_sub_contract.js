@@ -9,7 +9,8 @@ module.exports = function(deployer) {
       '0x48BaCB9266a570d521063EF5dD96e61686DbE788',
       '0x1dc4c1cefef38a777b15aa20260a54e584b16c48',
       await (await OrderGateway.deployed()).paradigmBank.call(),
-      JSON.stringify(ZeroExSubContractConfig.dataTypes)
+      JSON.stringify(ZeroExSubContractConfig.makerDataTypes),
+      JSON.stringify(ZeroExSubContractConfig.takerDataTypes)
     );//TODO: get address from
   });
 };

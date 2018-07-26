@@ -1,15 +1,20 @@
-exports.dataTypes = [
-  { 'dataType': "address", 'name': "signer", 'makerData': true },//0
-  { 'dataType': "address", 'name': "signerToken", 'makerData': true },//1
-  { 'dataType': "uint", 'name': "signerTokenCount", 'makerData': true },//2
-  { 'dataType': "address", 'name': "buyer", 'makerData': true },//3
-  { 'dataType': "address", 'name': "buyerToken", 'makerData': true },//4
-  { 'dataType': "uint", 'name': "buyerTokenCount", 'makerData': true },//5
-  { 'dataType': "uint", 'name': "tokensToBuy"},//6
-  { 'dataType': 'signedTransfer', 'name': 'signerTransfer', 'makerData': true },//7 8 9 10 11 12 -- recipient maxAmount v r s nonce
-  { 'dataType': 'signedTransfer', 'name': 'buyerTransfer' },//13 14 15 16 17 18 -- recipient maxAmount v r s nonce
-  { 'dataType': "signature", 'signatureFields': [0, 1, 2, 3, 4, 5]}//19 20 21
+exports.makerDataTypes = [
+  { 'dataType': "address", 'name': "signer" },//0
+  { 'dataType': "address", 'name': "signerToken" },//1
+  { 'dataType': "uint", 'name': "signerTokenCount" },//2
+  { 'dataType': "address", 'name': "buyer" },//3
+  { 'dataType': "address", 'name': "buyerToken" },//4
+  { 'dataType': "uint", 'name': "buyerTokenCount" },//5
+  { 'dataType': 'signedTransfer', 'name': 'signerTransfer' },//7 -> 6 | 8 -> 7 | 9 -> 8 | 10 -> 9 | 11 -> 10 | 12 -> 11 -- recipient maxAmount v r s nonce
+  { 'dataType': "signature", 'signatureFields': [0, 1, 2, 3, 4, 5]}//19 -> 12 | 20 -> 13 | 21 -> 14
 ];
+
+exports.takerDataTypes = [
+  { 'dataType': "uint", 'name': "tokensToBuy"},//6 -> 0
+  { 'dataType': 'signedTransfer', 'name': 'buyerTransfer' },//13 -> 1 | 14 -> 2 | 15 -> 3 | 16 -> 4 | 17 -> 5 | 18 -> 6 | -- recipient maxAmount v r s nonce
+
+];
+
 
 /*Issues with the ParadigmBank concept for signedTransfer.
 *  a. If you give someone the details of for a signed transfer in plain text it will be vulnerable for manual draining.

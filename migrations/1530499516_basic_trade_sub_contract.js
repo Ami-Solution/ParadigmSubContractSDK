@@ -5,11 +5,13 @@ const BasicTradeSubContractConfig = require('../configuration/BasicTradeSubContr
 module.exports = function(deployer) {
   deployer.then(async () => {
     const pba = await (await OrderGateway.deployed()).paradigmBank.call();
-    const dt = JSON.stringify(BasicTradeSubContractConfig.dataTypes);
+    const mdt = JSON.stringify(BasicTradeSubContractConfig.makerDataTypes);
+    const tdt = JSON.stringify(BasicTradeSubContractConfig.takerDataTypes);
     await deployer.deploy(
       BasicTradeSubContract,
       pba,
-      dt
+      mdt,
+      tdt
     );
   });
 };

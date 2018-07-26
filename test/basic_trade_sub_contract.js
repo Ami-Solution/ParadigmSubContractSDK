@@ -5,7 +5,7 @@ const ParadigmBank = artifacts.require("./ParadigmBank.sol");
 const BasicTradeSubContract = artifacts.require('./BasicTradeSubContract.sol');
 
 contract('BasicTradeSubContract', async (accounts) => {
-  let tokenA, tokenB, orderGateway, paradigmBank, basicTradeSubContract, basicTradeSubContractDataTypes;
+  let tokenA, tokenB, orderGateway, paradigmBank, basicTradeSubContract, basicTradeSubContractMakerDataTypes, basicTradeSubContractTakerDataTypes;
   const paradigmJS = new ParadigmJS({ provider: web3.currentProvider });
 
   before(async () => {
@@ -14,7 +14,8 @@ contract('BasicTradeSubContract', async (accounts) => {
     orderGateway = await OrderGateway.deployed();
     paradigmBank = ParadigmBank.at(await orderGateway.paradigmBank.call());
     basicTradeSubContract = await BasicTradeSubContract.deployed();
-    basicTradeSubContractDataTypes = JSON.parse(await basicTradeSubContract.dataTypes.call());
+    basicTradeSubContractMakerDataTypes = JSON.parse(await basicTradeSubContract.makerDataTypes.call());
+    basicTradeSubContractTakerDataTypes = JSON.parse(await basicTradeSubContract.takerDataTypes.call());
   });
 
   it('should allow a signed order to be traded', async () => {
@@ -35,14 +36,19 @@ contract('BasicTradeSubContract', async (accounts) => {
       'buyerTokenCount': '500',
       'tokensToBuy': '500',
       signerTransfer,
+    };
+
+    const take = {
+      'tokensToBuy': '500',
       buyerTransfer
     };
 
-    const data = await ParadigmJS.utils.toContractInput(basicTradeSubContractDataTypes, order, web3.currentProvider, accounts[0]);
+    const makerData = await ParadigmJS.utils.toContractInput(basicTradeSubContractMakerDataTypes, order, web3.currentProvider, accounts[0]);
+    const takerData = await ParadigmJS.utils.toContractInput(basicTradeSubContractTakerDataTypes, take, web3.currentProvider, accounts[1]);
 
-    await orderGateway.participate(basicTradeSubContract.address, data, {from: accounts[1] });
+    await orderGateway.participate(basicTradeSubContract.address, makerData, takerData, {from: accounts[1] });
 
-    (await orderGateway.participate.estimateGas(basicTradeSubContract.address, data, {from: accounts[1] })).should.be.lt(130000, "Gas cost increased");
+    (await orderGateway.participate.estimateGas(basicTradeSubContract.address, makerData, takerData, {from: accounts[1] })).should.be.lt(130000, "Gas cost increased");
     (await tokenA.balanceOf(accounts[1])).toString().should.eq('500');
     (await tokenB.balanceOf(accounts[0])).toString().should.eq('250');
   })

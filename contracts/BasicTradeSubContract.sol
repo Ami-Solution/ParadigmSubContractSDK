@@ -8,66 +8,67 @@ contract BasicTradeSubContract is SubContract, SignatureVerification {
 
     mapping(bytes32 => uint) bought;
 
-    constructor(address _paradigmBank, string _dataTypes) {
+    constructor(address _paradigmBank, string _makerDataTypes, string _takerDataTypes) {
       paradigmBank = ParadigmBank(_paradigmBank);
-      dataTypes = _dataTypes;
+        makerDataTypes = _makerDataTypes;
+        takerDataTypes = _takerDataTypes;
     }
 
-    function participate(bytes32[] data) public returns (bool) {
+    function participate(bytes32[] makerData, bytes32[] takerData) public returns (bool) {
       // 1. Standard validation
-      require(verify(data));
+      require(verify(makerData));
 
       // 2. Contract specific validation
-      uint signerTokenCount = uint(data[2]);
-      uint buyerTokenCountToTrade = uint(data[5]);
-      require(bought[getOrderHash(data)] + buyerTokenCountToTrade < signerTokenCount);
+      uint signerTokenCount = uint(makerData[2]);
+      uint buyerTokenCountToTrade = uint(makerData[5]);
+      require(bought[getOrderHash(makerData)] + buyerTokenCountToTrade < signerTokenCount);
 
         // transfer a -> b
-        require(sendMaker(data));
+        require(sendMaker(makerData, takerData));
         // transfer b -> a
-        require(sendTaker(data));
+        require(sendTaker(makerData, takerData));
 
       return true;
     }
 
-    function getOrderHash(bytes32[] data) returns (bytes32) {
-      address signerToken = address(data[1]);
-      uint signerTokenCount = uint(data[2]);
-      address buyer = address(data[3]);
-      address buyerToken = address(data[4]);
-      uint buyerTokenCount = uint(data[5]);
-      return keccak256(getSigner(data), signerToken, signerTokenCount, buyer, buyerToken, buyerTokenCount);
+    function getOrderHash(bytes32[] makerData) returns (bytes32) {
+      address signerToken = address(makerData[1]);
+      uint signerTokenCount = uint(makerData[2]);
+      address buyer = address(makerData[3]);
+      address buyerToken = address(makerData[4]);
+      uint buyerTokenCount = uint(makerData[5]);
+      return keccak256(getSigner(makerData), signerToken, signerTokenCount, buyer, buyerToken, buyerTokenCount);
     }
 
-    function sendMaker(bytes32[] data) returns (bool) {
+    function sendMaker(bytes32[] makerData, bytes32[] takerData) returns (bool) {
         return paradigmBank.transferFromSignature(
-            address(data[1]),
-            address(data[0]),
-            address(data[3]), //TODO: how do we get the taker address?  data[3]?
-            uint(data[6]),
-            address(data[7]),
-            uint (data[8]),
-            uint8(data[9]),
-            bytes32(data[10]),
-            bytes32(data[11]),
-            uint(data[12])
+            address(makerData[1]),
+            address(makerData[0]),
+            address(makerData[3]), //TODO: how do we get the taker address?  data[3]?
+            uint(takerData[0]),
+            address(makerData[6]),
+            uint (makerData[7]),
+            uint8(makerData[8]),
+            bytes32(makerData[9]),
+            bytes32(makerData[10]),
+            uint(makerData[11])
         );
     }
 
-    function sendTaker(bytes32[] data) returns (bool) {
-        uint tokensTakerCount = ratioFor(uint(data[5]), uint(data[6]), uint(data[2]));
+    function sendTaker(bytes32[] makerData, bytes32[] takerData) returns (bool) {
+        uint tokensTakerCount = ratioFor(uint(makerData[5]), uint(takerData[0]), uint(makerData[2]));
 
         return paradigmBank.transferFromSignature(
-            address(data[4]),
-            address(data[3]),
-            address(data[0]),
+            address(makerData[4]),
+            address(makerData[3]),
+            address(makerData[0]),
             uint(tokensTakerCount),
-            address(data[13]),
-            uint (data[14]),
-            uint8(data[15]),
-            bytes32(data[16]),
-            bytes32(data[17]),
-            uint(data[18])
+            address(takerData[1]),
+            uint (takerData[2]),
+            uint8(takerData[3]),
+            bytes32(takerData[4]),
+            bytes32(takerData[5]),
+            uint(takerData[6])
         );
     }
 }
