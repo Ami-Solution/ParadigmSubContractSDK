@@ -9504,10 +9504,10 @@
     "50": {
       "events": {},
       "links": {},
-      "address": "0x96eccea4e124322a6aa0a004da1b91d9a3024c73",
-      "transactionHash": "0x48d189248611408aff617598eba438a57605a33a4f3e2745ad8871d3c04ba261"
+      "address": "0x8726c7414ac023d23348326b47af3205185fd035",
+      "transactionHash": "0x80c75ba762feb6b8b99100160cf2ed35a51eede33e60ebf2d1d2f14bba662926"
     }
   },
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-07-31T21:02:38.667Z"
+  "updatedAt": "2018-08-01T15:59:35.317Z"
 }
