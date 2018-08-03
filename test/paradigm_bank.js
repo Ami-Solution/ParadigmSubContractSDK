@@ -10,7 +10,7 @@ contract('ParadigmBank', async (accounts) => {
     tokenA = await Token.new("TokenA", 'TKA', { from: accounts[1] });
     orderGateway = await OrderGateway.deployed();
     paradigmBank = ParadigmBank.at(await orderGateway.paradigmBank.call());
-    paradigmJS = new ParadigmJS({ provider: web3.currentProvider });
+    paradigmJS = new ParadigmJS({ provider: web3.currentProvider, networkId: 50 });
     await paradigmJS.bank.giveMaxAllowanceFor(tokenA.address, paradigmBank.address, accounts[1]);
   });
 

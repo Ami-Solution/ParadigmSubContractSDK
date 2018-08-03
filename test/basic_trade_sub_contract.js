@@ -6,7 +6,7 @@ const BasicTradeSubContract = artifacts.require('./BasicTradeSubContract.sol');
 
 contract('BasicTradeSubContract', async (accounts) => {
   let tokenA, tokenB, orderGateway, paradigmBank, basicTradeSubContract, basicTradeSubContractMakerDataTypes, basicTradeSubContractTakerDataTypes;
-  const paradigmJS = new ParadigmJS({ provider: web3.currentProvider });
+  const paradigmJS = new ParadigmJS({ provider: web3.currentProvider, networkId: 50 });
 
   before(async () => {
     tokenA = await Token.new("TokenA", 'TKA', { from: accounts[0] });
