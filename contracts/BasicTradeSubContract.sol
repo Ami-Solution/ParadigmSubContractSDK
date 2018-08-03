@@ -20,8 +20,8 @@ contract BasicTradeSubContract is SubContract, SignatureVerification {
 
       // 2. Contract specific validation
       uint signerTokenCount = uint(makerData[2]);
-      uint buyerTokenCountToTrade = uint(makerData[5]);
-      require(bought[getOrderHash(makerData)] + buyerTokenCountToTrade < signerTokenCount);
+      uint signerTokenCountToTake = uint(takerData[0]);
+      require(bought[getOrderHash(makerData)] + signerTokenCountToTake < signerTokenCount);
 
         // transfer a -> b
         require(sendMaker(makerData, takerData));
