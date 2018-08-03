@@ -12,7 +12,6 @@ exports.makerDataTypes = [
 exports.takerDataTypes = [
   { 'dataType': "uint", 'name': "tokensToBuy"},//6 -> 0
   { 'dataType': 'signedTransfer', 'name': 'buyerTransfer' },//13 -> 1 | 14 -> 2 | 15 -> 3 | 16 -> 4 | 17 -> 5 | 18 -> 6 | -- recipient maxAmount v r s nonce
-
 ];
 
 
