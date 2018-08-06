@@ -1,17 +1,27 @@
 pragma solidity ^0.4.24;
 
-//import "../installed_contracts/zeppelin/contracts/token/StandardToken.sol";
 import "./SubContract.sol";
+import "./ParadigmBank.sol";
 
 contract OrderGateway {
 
+    ParadigmBank public paradigmBank;
+
     event DealAdded(address dealOwner, uint timestamp, address modelAddress, address desiredToken, address paymentToken);
 
-    function participate(address subContract, bytes32[] data) returns (bool) {
-        return SubContract(subContract).participate(data);
+    constructor() public {
+        paradigmBank = new ParadigmBank();
     }
 
-    function dataTypes(address subContract) returns (string) {
-        return SubContract(subContract).dataTypes();
+    function participate(address subContract, bytes32[] makerData, bytes32[] takerData) public returns (bool) {
+        return SubContract(subContract).participate(makerData, takerData);
+    }
+
+    function makerDataTypes(address subContract) public view returns (string) {
+        return SubContract(subContract).makerDataTypes();
+    }
+
+    function takerDataTypes(address subContract) public view returns (string) {
+        return SubContract(subContract).takerDataTypes();
     }
 }

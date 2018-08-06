@@ -9,7 +9,7 @@ contract Token is StandardToken {
   string public symbol;
   uint8 public decimals = 18;
 
-  function Token(string _name, string _symbol) {
+  constructor(string _name, string _symbol) public {
     balances[msg.sender] = 100000 ether;
     totalSupply = 100000 ether;
     name = _name;

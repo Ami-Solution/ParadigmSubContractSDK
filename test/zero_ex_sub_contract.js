@@ -4,15 +4,20 @@ const Token = artifacts.require("./Token.sol");
 const ZeroEx = require('0x.js').ZeroEx;
 const BigNumber = require('@0xproject/utils').BigNumber;
 const ZeroExSubContractConfig = require('../configuration/ZeroExSubContract');
+const ParadigmJS = require('paradigm.js');
 
 contract('ZeroExSubContract', async function(accounts) {
-  let tokenA, tokenB, orderGateway, zeroExSubContract, zeroEx, WETH_ADDRESS, ZRX_ADDRESS, EXCHANGE_ADDRESS, PROXY;
+  let tokenA, tokenB, orderGateway, paradigmBank, zeroExSubContract, zeroExSubContractMakerDataTypes, zeroExSubContractTakerDataTypes, zeroEx,
+    WETH_ADDRESS, ZRX_ADDRESS, EXCHANGE_ADDRESS, PROXY;
 
   before(async () => {
     tokenA = await Token.new("TokenA", 'TKA', { from: accounts[1] });
     tokenB = await Token.new("TokenB", 'TKB', { from: accounts[2] });
     orderGateway = await OrderGateway.deployed();
+    paradigmBank = await orderGateway.paradigmBank.call();
     zeroExSubContract = await ZeroExSubContract.deployed();
+    zeroExSubContractMakerDataTypes = JSON.parse(await orderGateway.makerDataTypes.call(zeroExSubContract.address));
+    zeroExSubContractTakerDataTypes = JSON.parse(await orderGateway.takerDataTypes.call(zeroExSubContract.address));
     zeroEx = new ZeroEx(web3.currentProvider, { networkId: 50 });
 
     WETH_ADDRESS = zeroEx.etherToken.getContractAddressIfExists();
@@ -35,7 +40,7 @@ contract('ZeroExSubContract', async function(accounts) {
   });
 
   it('should handle a very basic transfer', async () => {
-    const order = {
+    const zeroExOrder = {
       maker: accounts[1],
       taker: ZeroEx.NULL_ADDRESS,
       feeRecipient: ZeroEx.NULL_ADDRESS,
@@ -48,42 +53,49 @@ contract('ZeroExSubContract', async function(accounts) {
       makerTokenAmount: ZeroEx.toBaseUnitAmount(new BigNumber(0.2), 18), // Base 18 decimals
       takerTokenAmount: ZeroEx.toBaseUnitAmount(new BigNumber(0.3), 18), // Base 18 decimals
       expirationUnixTimestampSec: new BigNumber(Date.now() + 3600000)
-
     };
 
-    await tokenB.transfer(zeroExSubContract.address, order.takerTokenAmount, { from: accounts[2] });
+    let order = {};
 
-    const ecSignature = await zeroEx.signOrderHashAsync(ZeroEx.getOrderHashHex(order), accounts[1], false);
+    Object.keys(zeroExOrder).forEach((key) => {
+      order[`order${key.replace(/^\w/, c => c.toUpperCase())}`] = zeroExOrder[key];
+    });
+
+    const ecSignature = await zeroEx.signOrderHashAsync(ZeroEx.getOrderHashHex(zeroExOrder), accounts[1], false);
+    const preparedOrder = {
+      ...order,
+      signatureV: ecSignature.v,
+      signatureR: ecSignature.r,
+      signatureS: ecSignature.s
+    };
+    const take = {
+      tokensToTake: zeroExOrder.takerTokenAmount,
+      throwOnError: false,
+      makerTokenReceiver: accounts[2]
+    };
+
+    const makerData = await ParadigmJS.utils.toContractInput(zeroExSubContractMakerDataTypes,
+      preparedOrder,
+      { from: accounts[1] }
+    );
+    const takerData = await ParadigmJS.utils.toContractInput(zeroExSubContractTakerDataTypes, take, { from: accounts[1] });
+
+    await tokenB.approve(paradigmBank, take.tokensToTake, { from: accounts[2] });
 
     await orderGateway.participate(
       zeroExSubContract.address,
-      [
-        utils.toBytes32(order.maker),
-        utils.toBytes32(order.taker),
-        utils.toBytes32(order.makerTokenAddress),
-        utils.toBytes32(order.takerTokenAddress),
-        utils.toBytes32(order.feeRecipient),
-        utils.toBytes32(order.makerTokenAmount),
-        utils.toBytes32(order.takerTokenAmount),
-        utils.toBytes32(order.makerFee),
-        utils.toBytes32(order.takerFee),
-        utils.toBytes32(order.expirationUnixTimestampSec),
-        utils.toBytes32(order.salt),
-        utils.toBytes32(order.takerTokenAmount),
-        utils.toBytes32(false),
-        utils.toBytes32(ecSignature.v),
-        utils.toBytes32(ecSignature.r),
-        utils.toBytes32(ecSignature.s)
-      ]
+      makerData,
+      takerData,
+      { from: accounts[2] }
     );
 
 
-
-    (await tokenA.balanceOf.call(zeroExSubContract.address)).toString().should.eq(order.makerTokenAmount.toString()); //TODO: Contract needs to forward the funds.
-    (await tokenB.balanceOf.call(accounts[1])).toString().should.eq(order.takerTokenAmount.toString());
+    (await tokenA.balanceOf.call(accounts[2])).toString().should.eq(zeroExOrder.makerTokenAmount.toString());
+    (await tokenB.balanceOf.call(accounts[1])).toString().should.eq(zeroExOrder.takerTokenAmount.toString());
   });
 
-  it('should provide the input datatypes', async () => {
-    JSON.parse(await orderGateway.dataTypes.call(zeroExSubContract.address)).should.deep.equal(ZeroExSubContractConfig.dataTypes)
+  it('should provide the input dataTypes', async () => {
+    zeroExSubContractMakerDataTypes.should.deep.equal(ZeroExSubContractConfig.makerDataTypes);
+    zeroExSubContractTakerDataTypes.should.deep.equal(ZeroExSubContractConfig.takerDataTypes);
   });
 });
