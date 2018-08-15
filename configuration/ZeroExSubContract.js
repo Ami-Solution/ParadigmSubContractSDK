@@ -1,4 +1,4 @@
-exports.makerDataTypes = [
+exports.makerArguments = [
   {'dataType': "address", 'name': "orderMaker" }, // 0
   {'dataType': "address", 'name': "orderTaker" }, // 1
   {'dataType': "address", 'name': "orderMakerTokenAddress" }, // 2
@@ -15,7 +15,7 @@ exports.makerDataTypes = [
   {'dataType': "bytes32", 'name': "signatureS" }, // 15 -> 13
 ];
 
-exports.takerDataTypes = [
+exports.takerArguments = [
   {'dataType': "uint", 'name': "tokensToTake" }, // 11 -> 0
   {'dataType': "bool", 'name': "throwOnError" }, // 12 -> 1
   {'dataType': "address", 'name': "makerTokenReceiver" } // 16 -> 2

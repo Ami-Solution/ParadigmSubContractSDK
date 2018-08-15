@@ -5,7 +5,7 @@ const ParadigmBank = artifacts.require("./ParadigmBank.sol");
 const BasicTradeSubContract = artifacts.require('./BasicTradeSubContract.sol');
 
 contract('BasicTradeSubContract', async (accounts) => {
-  let tokenA, tokenB, orderGateway, paradigmBank, basicTradeSubContract, basicTradeSubContractMakerDataTypes, basicTradeSubContractTakerDataTypes;
+  let tokenA, tokenB, orderGateway, paradigmBank, basicTradeSubContract, basicTradeSubContractMakerArguments, basicTradeSubContractTakerArguments;
   const paradigmJS = new ParadigmJS({ provider: web3.currentProvider, networkId: 50 });
 
   before(async () => {
@@ -14,8 +14,8 @@ contract('BasicTradeSubContract', async (accounts) => {
     orderGateway = await OrderGateway.deployed();
     paradigmBank = ParadigmBank.at(await orderGateway.paradigmBank.call());
     basicTradeSubContract = await BasicTradeSubContract.deployed();
-    basicTradeSubContractMakerDataTypes = JSON.parse(await basicTradeSubContract.makerDataTypes.call());
-    basicTradeSubContractTakerDataTypes = JSON.parse(await basicTradeSubContract.takerDataTypes.call());
+    basicTradeSubContractMakerArguments = JSON.parse(await basicTradeSubContract.makerArguments.call());
+    basicTradeSubContractTakerArguments = JSON.parse(await basicTradeSubContract.takerArguments.call());
   });
 
   it('should allow a signed order to be traded', async () => {
@@ -43,8 +43,8 @@ contract('BasicTradeSubContract', async (accounts) => {
       buyerTransfer
     };
 
-    const makerData = await ParadigmJS.utils.toContractInput(basicTradeSubContractMakerDataTypes, order, web3.currentProvider, accounts[0]);
-    const takerData = await ParadigmJS.utils.toContractInput(basicTradeSubContractTakerDataTypes, take, web3.currentProvider, accounts[1]);
+    const makerData = await ParadigmJS.utils.toContractInput(basicTradeSubContractMakerArguments, order, web3.currentProvider, accounts[0]);
+    const takerData = await ParadigmJS.utils.toContractInput(basicTradeSubContractTakerArguments, take, web3.currentProvider, accounts[1]);
 
     await orderGateway.participate(basicTradeSubContract.address, makerData, takerData, {from: accounts[1] });
 

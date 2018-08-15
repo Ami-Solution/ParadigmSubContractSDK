@@ -1,4 +1,4 @@
-exports.makerDataTypes = [
+exports.makerArguments = [
   { 'dataType': "address", 'name': "signer" },//0
   { 'dataType': "address", 'name': "signerToken" },//1
   { 'dataType': "uint", 'name': "signerTokenCount" },//2
@@ -9,7 +9,7 @@ exports.makerDataTypes = [
   { 'dataType': "signature", 'signatureFields': [0, 1, 2, 3, 4, 5]}//19 -> 12 | 20 -> 13 | 21 -> 14
 ];
 
-exports.takerDataTypes = [
+exports.takerArguments = [
   { 'dataType': "uint", 'name': "tokensToBuy"},//6 -> 0
   { 'dataType': 'signedTransfer', 'name': 'buyerTransfer' },//13 -> 1 | 14 -> 2 | 15 -> 3 | 16 -> 4 | 17 -> 5 | 18 -> 6 | -- recipient maxAmount v r s nonce
 ];

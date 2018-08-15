@@ -8,10 +8,10 @@ contract BasicTradeSubContract is SubContract, SignatureVerification {
 
     mapping(bytes32 => uint) bought;
 
-    constructor(address _paradigmBank, string _makerDataTypes, string _takerDataTypes) {
+    constructor(address _paradigmBank, string _makerArguments, string _takerArguments) {
       paradigmBank = ParadigmBank(_paradigmBank);
-        makerDataTypes = _makerDataTypes;
-        takerDataTypes = _takerDataTypes;
+        makerArguments = _makerArguments;
+        takerArguments = _takerArguments;
     }
 
     function participate(bytes32[] makerData, bytes32[] takerData) public returns (bool) {

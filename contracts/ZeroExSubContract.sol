@@ -9,11 +9,11 @@ contract ZeroExSubContract is SubContract {
   Exchange public exchange;
   address public zeroExProxy;
 
-  constructor(address _exchange, address _proxy, address _paradigmBank, string _makerDataTypes, string _takerDataTypes) public {
+  constructor(address _exchange, address _proxy, address _paradigmBank, string _makerArguments, string _takerArguments) public {
     exchange = Exchange(_exchange);
     zeroExProxy = _proxy;
-    makerDataTypes = _makerDataTypes;
-    takerDataTypes = _takerDataTypes;
+    makerArguments = _makerArguments;
+    takerArguments = _takerArguments;
     paradigmBank = ParadigmBank(_paradigmBank);
   }
 

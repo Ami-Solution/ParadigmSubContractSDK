@@ -28,8 +28,8 @@ module.exports = function(deployer) {
       zeroExExchange,
       zeroExProxy,
       await (await OrderGateway.deployed()).paradigmBank.call(),
-      JSON.stringify(ZeroExSubContractConfig.makerDataTypes),
-      JSON.stringify(ZeroExSubContractConfig.takerDataTypes)
+      JSON.stringify(ZeroExSubContractConfig.makerArguments),
+      JSON.stringify(ZeroExSubContractConfig.takerArguments)
     );//TODO: get address from
   });
 };
