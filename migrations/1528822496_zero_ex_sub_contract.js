@@ -21,8 +21,6 @@ module.exports = function(deployer) {
     const zeroExExchange = zeroEx.exchange.getContractAddress();
     const zeroExProxy = zeroEx.proxy.getContractAddress();
 
-    console.log(zeroExExchange, zeroExProxy);
-
     await deployer.deploy(
       ZeroExSubContract,
       zeroExExchange,
