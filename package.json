@@ -2,15 +2,11 @@
   "name": "paradigmcontracts",
   "version": "1.0.0",
   "description": "",
-  "scripts": {
-    "testrpc": "ganache-cli --networkId 50 --db ./0x_testrpc_snapshot -m \"concert load couple harbor equip island argue ramp clarify fence smart topic\""
-  },
+  "scripts": {},
   "dependencies": {
-    "0x.js": "^0.38.6",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "ethereumjs-wallet": "^0.6.1",
-    "ganache-cli": "^6.1.6",
     "paradigm.js": "0.0.6",
     "truffle-wallet-provider": "0.0.5"
   }
