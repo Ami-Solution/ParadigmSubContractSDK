@@ -1,6 +1,6 @@
 {
   "package_name": "paradigm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Paradigm SubContract building utilities",
   "authors": [
     "Nick Freyaldenhoven <freyaldenhovennc@gmail.com>"
