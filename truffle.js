@@ -14,7 +14,8 @@ if(process.env.keystore_password) {
       gas: 4600000,
       gasPrice: 40000000000,
       provider: new WalletProvider(wallet, "https://ropsten.infura.io")
-  }
+  };
+  config.networks.ropsten = config.networks.staging;
 }
 
 module.exports = config;
