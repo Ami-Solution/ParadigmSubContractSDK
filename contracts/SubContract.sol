@@ -1,6 +1,5 @@
 pragma solidity ^0.4.24;
 
-import "./ParadigmBank.sol";
 import "../installed_contracts/zeppelin/contracts/math/SafeMath.sol";
 
 contract SubContract {
@@ -8,7 +7,6 @@ contract SubContract {
 
     string public makerArguments;
     string public takerArguments;
-    ParadigmBank public paradigmBank;
 
     function participate(bytes32[] makerData, bytes32[] takerData) public returns (bool);
 
