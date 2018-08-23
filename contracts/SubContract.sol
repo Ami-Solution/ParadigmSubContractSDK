@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "../installed_contracts/zeppelin/contracts/math/SafeMath.sol";
+import "zeppelin/contracts/math/SafeMath.sol";
 
 contract SubContract {
     using SafeMath for uint;
