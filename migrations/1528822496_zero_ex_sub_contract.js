@@ -25,7 +25,6 @@ module.exports = function(deployer) {
       ZeroExSubContract,
       zeroExExchange,
       zeroExProxy,
-      await (await OrderGateway.deployed()).paradigmBank.call(),
       JSON.stringify(ZeroExSubContractConfig.makerArguments),
       JSON.stringify(ZeroExSubContractConfig.takerArguments)
     );//TODO: get address from

@@ -9,12 +9,11 @@ contract ZeroExSubContract is SubContract {
   Exchange public exchange;
   address public zeroExProxy;
 
-  constructor(address _exchange, address _proxy, address _paradigmBank, string _makerArguments, string _takerArguments) public {
+  constructor(address _exchange, address _proxy, string _makerArguments, string _takerArguments) public {
     exchange = Exchange(_exchange);
     zeroExProxy = _proxy;
     makerArguments = _makerArguments;
     takerArguments = _takerArguments;
-    paradigmBank = ParadigmBank(_paradigmBank);
   }
 
   function participate(bytes32[] makerData, bytes32[] takerData) public returns (bool) {
@@ -25,8 +24,7 @@ contract ZeroExSubContract is SubContract {
     uint makerTokenCount = uint(makerData[5]);
     uint takerTokenCount = uint(makerData[6]);
 
-    paradigmBank.transferFromOrigin(takerToken, address(this), takerTokenToTrade);
-
+    takerToken.transferFrom(taker, this, takerTokenToTrade);
     takerToken.approve(zeroExProxy, uint(takerData[0]));
 
     uint takerTokensTransferred = fillOrder(makerData, takerData);

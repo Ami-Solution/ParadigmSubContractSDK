@@ -4,6 +4,6 @@ const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 
 before(() => {
-  expect = chai.expect
-  chai.should()
+  expect = chai.expect;
+  chai.should();
 });

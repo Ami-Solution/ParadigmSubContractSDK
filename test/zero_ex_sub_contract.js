@@ -27,7 +27,7 @@ contract('ZeroExSubContract', async function(accounts) {
 
     await zeroEx.token.setUnlimitedAllowanceAsync(tokenA.address, accounts[1], PROXY);
 
-    await zeroEx.token.setUnlimitedAllowanceAsync(tokenB.address, accounts[2], PROXY);
+    await zeroEx.token.setUnlimitedAllowanceAsync(tokenB.address, accounts[2], zeroExSubContract.address);
   });
 
   it("should have ZeroEx configured correctly", async function() {
