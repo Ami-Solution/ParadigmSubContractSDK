@@ -4,7 +4,6 @@
   "description": "Paradigm SubContract building utilities",
   "scripts": {},
   "dependencies": {
-    "openzeppelin-solidity": "1.12.0",
-    "truffle-wallet-provider": "0.0.5"
+    "openzeppelin-solidity": "1.12.0"
   }
 }
