@@ -1,7 +1,7 @@
 {
-  "name": "paradigmcontracts",
-  "version": "1.0.0",
-  "description": "",
+  "name": "paradigm-solidity",
+  "version": "0.0.1",
+  "description": "Paradigm SubContract building utilities",
   "scripts": {},
   "dependencies": {
     "ethereumjs-wallet": "^0.6.1",
