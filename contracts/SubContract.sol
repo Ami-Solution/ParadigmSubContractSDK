@@ -1,14 +1,12 @@
 pragma solidity ^0.4.24;
 
-import "./ParadigmBank.sol";
-import "../installed_contracts/zeppelin/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 contract SubContract {
     using SafeMath for uint;
 
-    string public makerDataTypes;
-    string public takerDataTypes;
-    ParadigmBank public paradigmBank;
+    string public makerArguments;
+    string public takerArguments;
 
     function participate(bytes32[] makerData, bytes32[] takerData) public returns (bool);
 
