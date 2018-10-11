@@ -61,8 +61,10 @@ function participate(bytes32[] makerData, bytes32[) takerData) public returns (b
     uint count = uint(makerData[1]);
     address taker = address(makerData[2]);
     
+    //Boolean values don't have a casting mechanism I'm aware of, but are represented as a 0  
+    //or 1 when cast to a uint.  
+    bool boolean = uint(takerData[0]) > 0
+    
     return true;
 } 
 ```
-
-
