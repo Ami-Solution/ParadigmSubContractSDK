@@ -1,24 +1,24 @@
-#ParadigmSubContractSDK
+# ParadigmSubContractSDK
 
-###Installation
+### Installation
 
 `npm i paradigm-subcontract-sdk`
 
-###Usage
+### Usage
 
-#####Creating a Paradigm SubContract
+##### Creating a Paradigm SubContract
 
-######Import the SubContract
+###### Import the SubContract
 `import "paradigm-subcontract-sdk/contracts/SubContract.sol";`
 
-######Extend SubContract
+###### Extend SubContract
 ```
 contract YourContract is SubContract {
 
 }
 ```
 
-######Implement the required methods
+###### Implement the required methods
 ```
 //Optional, but suggest initializing with the arguments.
 constructor(_makerArguments, _takerArguments) {
@@ -32,8 +32,8 @@ function participate(bytes32[] makerData, bytes32[) takerData) public returns (b
 } 
 ```
 
-#####Defining arguments
-######The arguments are a JSON string that is of the structure:
+##### Defining arguments
+###### The arguments are a JSON string that is of the structure:
 ```
 [
   { 
@@ -44,7 +44,7 @@ function participate(bytes32[] makerData, bytes32[) takerData) public returns (b
   { dataType: 'address', name: 'taker' }
 ]
 ```
-######The arguments above would correspond to input in the following format
+###### The arguments above would correspond to input in the following format
 ```
 {
   maker: '0x01234abc',
