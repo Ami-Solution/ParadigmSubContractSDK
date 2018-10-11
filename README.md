@@ -34,14 +34,15 @@ function participate(bytes32[] makerData, bytes32[) takerData) public returns (b
 
 ##### Defining arguments
 ###### The arguments are a JSON string that is of the structure:
+Arguments are an ordered list where the array index in this json object correspond to the contracts bytes32 input. 
 ```
 [
   { 
     dataType: 'address', //The solidity data type the variable will be expected to 
     name:'maker' //The name of the key in the Paradigm Connect input
-  },
-  { dataType: 'uint', name: 'count' },
-  { dataType: 'address', name: 'taker' }
+  }, //0 of bytes32 input
+  { dataType: 'uint', name: 'count' }, //1 of bytes32 input
+  { dataType: 'address', name: 'taker' } //2 of bytes32 input
 ]
 ```
 ###### The arguments above would correspond to input in the following format
@@ -52,6 +53,16 @@ function participate(bytes32[] makerData, bytes32[) takerData) public returns (b
   taker: '0x0321cba'
 }
 ```
-
+######Typecasting solidity function input
+Assuming the example arguments were defined as the makerArguments.  Usage of them in the solidity may look like:
+```
+function participate(bytes32[] makerData, bytes32[) takerData) public returns (bool) {
+    address maker = address(makerData[0]);
+    uint count = uint(makerData[1]);
+    address taker = address(makerData[2]);
+    
+    return true;
+} 
+```
 
 
