@@ -53,7 +53,7 @@ Arguments are an ordered list where the array index in this json object correspo
   taker: '0x0321cba'
 }
 ```
-######Typecasting solidity function input
+###### Typecasting solidity function input
 Assuming the example arguments were defined as the makerArguments.  Usage of them in the solidity may look like:
 ```
 function participate(bytes32[] makerData, bytes32[) takerData) public returns (bool) {
