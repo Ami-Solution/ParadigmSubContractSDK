@@ -1,5 +1,5 @@
 {
-  "name": "paradigm-solidity",
+  "name": "paradigm-subcontract-sdk",
   "version": "0.0.1",
   "description": "Paradigm SubContract building utilities",
   "scripts": {},
