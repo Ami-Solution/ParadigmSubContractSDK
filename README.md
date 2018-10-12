@@ -35,7 +35,7 @@ function participate(bytes32[] makerData, bytes32[) takerData) public returns (b
 ##### Defining arguments
 ###### The arguments are a JSON string that is of the structure:
 Arguments are an ordered list where the array index in this json object correspond to the contracts bytes32 input. 
-```solidity
+```
 [
   { 
     dataType: 'address', //The solidity data type the variable will be expected to 
